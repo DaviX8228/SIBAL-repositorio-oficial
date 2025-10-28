@@ -4,6 +4,7 @@
  */
 package backend;
 
+<<<<<<< HEAD
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,4 +33,12 @@ public class ConexionBD {
         return conexion;
     }
     
+=======
+/**
+ *
+ * @author davhe
+ */
+public class ConexionBD {
+    
+>>>>>>> 99b2909ea92b359e9773d6e174954d77202ad2ba
 }

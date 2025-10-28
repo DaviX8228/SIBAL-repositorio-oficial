@@ -3,7 +3,11 @@
     <type>org.netbeans.modules.java.j2seproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
+<<<<<<< HEAD
             <name>SIBAL_DB</name>
+=======
+            <name>SIBAL</name>
+>>>>>>> 99b2909ea92b359e9773d6e174954d77202ad2ba
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
