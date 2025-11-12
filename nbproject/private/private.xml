@@ -3,20 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/backend/ConexionBD.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/backend/ControlEntradasSalidas.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/backend/Inventario.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/backend/Producto.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/frontend/frmLogin.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/frontend/frmMenuPrincipal.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/frontend/frmRegistroProducto.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/frontend/frmEntradas.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/frontend/frmSalidas.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/frontend/frmReportes.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/frontend/frmProgramador.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/seguridad/Usuario.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/seguridad/Sesion.java</file>
-            <file>file:/C:/Users/davhe/OneDrive/Documentos/NetBeansProjects/SIBAL/src/seguridad/ValidarAcceso.java</file>
+            <file>file:/C:/Users/davhe/OneDrive/Documentos/TAREAS%20ESCUELA/Desarrollo%20de%20Apps%20con%20Interfaces%20gráficas/SIBAL/src/backend/ControlEntradasSalidas.java</file>
+            <file>file:/C:/Users/davhe/OneDrive/Documentos/TAREAS%20ESCUELA/Desarrollo%20de%20Apps%20con%20Interfaces%20gráficas/SIBAL/src/backend/Inventario.java</file>
+            <file>file:/C:/Users/davhe/OneDrive/Documentos/TAREAS%20ESCUELA/Desarrollo%20de%20Apps%20con%20Interfaces%20gráficas/SIBAL/src/backend/Producto.java</file>
+            <file>file:/C:/Users/davhe/OneDrive/Documentos/TAREAS%20ESCUELA/Desarrollo%20de%20Apps%20con%20Interfaces%20gráficas/SIBAL/src/seguridad/Usuario.java</file>
+            <file>file:/C:/Users/davhe/OneDrive/Documentos/TAREAS%20ESCUELA/Desarrollo%20de%20Apps%20con%20Interfaces%20gráficas/SIBAL/src/seguridad/ControlRegistro.java</file>
+            <file>file:/C:/Users/davhe/OneDrive/Documentos/TAREAS%20ESCUELA/Desarrollo%20de%20Apps%20con%20Interfaces%20gráficas/SIBAL/src/frontend/frmLogin.java</file>
+            <file>file:/C:/Users/davhe/OneDrive/Documentos/TAREAS%20ESCUELA/Desarrollo%20de%20Apps%20con%20Interfaces%20gráficas/SIBAL/src/backend/ConexionBD.java</file>
         </group>
     </open-files>
 </project-private>

@@ -4,8 +4,6 @@
  */
 package backend;
 
-<<<<<<< HEAD
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -17,7 +15,7 @@ import java.sql.SQLException;
  */
 public class ConexionBD {
     
-    private static final String URL = "jdbc:mysql://localhost:3306/sibal";
+    private static final String URL = "jdbc:mysql://localhost:3307/sibal";
     private static final String USER = "root"; // cambia si tienes otro usuario
     private static final String PASSWORD = ""; // pon tu contraseña si tienes
 
@@ -33,12 +31,4 @@ public class ConexionBD {
         return conexion;
     }
     
-=======
-/**
- *
- * @author davhe
- */
-public class ConexionBD {
-    
->>>>>>> 99b2909ea92b359e9773d6e174954d77202ad2ba
 }
