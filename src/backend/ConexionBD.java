@@ -16,8 +16,8 @@ import java.sql.SQLException;
 public class ConexionBD {
     
     private static final String URL = "jdbc:mysql://localhost:3307/sibal";
-    private static final String USER = "root"; // cambia si tienes otro usuario
-    private static final String PASSWORD = ""; // pon tu contraseña si tienes
+    private static final String USER = "root"; 
+    private static final String PASSWORD = ""; //como no tenemos contraseña root de MySQL pss así lo dejamos 
 
     public static Connection conectar() {
         Connection conexion = null;

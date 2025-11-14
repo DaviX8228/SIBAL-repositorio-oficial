@@ -6,7 +6,7 @@ package backend;
 
 /**
  *
- * @author davhe
+ * @author David Velazquez
  */
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ControlProductos {
 
-    // ➕ Agregar producto
+    // Agregar producto
     public static boolean agregarProducto(String nombre, String descripcion, int stock, double precio, int idCategoria, int idProveedor) {
         Connection conexion = ConexionBD.conectar();
         boolean exito = false;
@@ -77,7 +77,7 @@ public class ControlProductos {
         return exito;
     }
 
-    // 🔍 Consultar todos los productos
+    // Consultar todos los productos
     public static List<String> obtenerProductos() {
         Connection conexion = ConexionBD.conectar();
         List<String> productos = new ArrayList<>();
