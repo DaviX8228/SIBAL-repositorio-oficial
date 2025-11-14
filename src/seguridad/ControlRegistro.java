@@ -37,7 +37,7 @@ public class ControlRegistro {
             
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getUsuario());
-            ps.setString(3, usuario.getContraseña());  // NOTA: Deberías hashearla con SHA-256 o BCrypt
+            ps.setString(3, usuario.getContraseña());  
             ps.setString(4, usuario.getRol());
             ps.setBoolean(5, usuario.isEstado());
             

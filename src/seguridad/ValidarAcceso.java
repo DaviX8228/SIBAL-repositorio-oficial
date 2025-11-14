@@ -19,6 +19,7 @@ public class ValidarAcceso {
      * @param contraseña Contraseña del usuario
      * @return Usuario si las credenciales son correctas, null si no
      */
+    
     public Usuario iniciarSesion(String usuario, String contraseña) {
         if (usuario == null || usuario.trim().isEmpty() || 
             contraseña == null || contraseña.trim().isEmpty()) {
@@ -32,7 +33,7 @@ public class ValidarAcceso {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
             ps.setString(1, usuario);
-            ps.setString(2, contraseña);  // NOTA: Deberías comparar con hash
+            ps.setString(2, contraseña); 
             
             ResultSet rs = ps.executeQuery();
             
@@ -66,6 +67,7 @@ public class ValidarAcceso {
      * @param rol Rol requerido ("Administrador" o "Encargado")
      * @return true si tiene el rol, false si no
      */
+    
     public boolean tieneRol(Usuario usuario, String rol) {
         if (usuario == null) {
             return false;

@@ -6,7 +6,7 @@ package backend;
 
 /**
  *
- * @author davhe
+ * @author David Velazquez
  */
 public class Inventario {
     

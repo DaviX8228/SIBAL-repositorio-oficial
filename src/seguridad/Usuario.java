@@ -16,7 +16,6 @@ public class Usuario {
     private String rol;  // "Administrador" o "Encargado"
     private boolean estado;
 
-    // Constructor para registro (sin ID, se genera automático)
     public Usuario(String nombre, String usuario, String contraseña, String rol) {
         this.nombre = nombre;
         this.usuario = usuario;
@@ -25,7 +24,6 @@ public class Usuario {
         this.estado = true;  // Por defecto activo
     }
 
-    // Constructor completo (cuando traes de BD)
     public Usuario(int idUsuario, String nombre, String usuario, String contraseña, String rol, boolean estado) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;

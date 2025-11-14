@@ -10,10 +10,9 @@ package seguridad;
  */
 public class Sesion {
     
-    private static Sesion instancia;  // La única instancia
-    private Usuario usuarioActivo;    // Usuario logueado
+    private static Sesion instancia;  
+    private Usuario usuarioActivo;   
     
-    // Constructor privado para evitar instanciación externa
     private Sesion() {
         this.usuarioActivo = null;
     }
