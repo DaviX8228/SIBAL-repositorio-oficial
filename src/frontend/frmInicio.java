@@ -4,6 +4,14 @@
  */
 package frontend;
 
+import java.awt.GridLayout;
+import javax.swing.JPanel;
+import javax.swing.*;
+import seguridad.ControlRegistro;
+import seguridad.Sesion;
+import seguridad.Usuario;
+import seguridad.ValidarAcceso;
+
 /**
  *
  * @author MISAEL JIMENEZ
@@ -57,12 +65,22 @@ public class frmInicio extends javax.swing.JFrame {
 
         btnIniciarS.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnIniciarS.setText("INICIA SESION");
+        btnIniciarS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarSActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("O");
 
         btnRegistrar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnRegistrar.setText("REGISTRATE");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -98,6 +116,171 @@ public class frmInicio extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+         // Crear panel personalizado para registro
+    JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
+    
+    JTextField txtNombre = new JTextField(15);
+    JTextField txtUsuario = new JTextField(15);
+    JPasswordField txtPassword = new JPasswordField(15);
+    JPasswordField txtConfirmPassword = new JPasswordField(15);
+    
+    // ComboBox para el rol
+    String[] roles = {"Encargado", "Administrador"};
+    JComboBox<String> cmbRol = new JComboBox<>(roles);
+    
+    panel.add(new JLabel("Nombre completo:"));
+    panel.add(txtNombre);
+    panel.add(new JLabel("Usuario:"));
+    panel.add(txtUsuario);
+    panel.add(new JLabel("Contraseña:"));
+    panel.add(txtPassword);
+    panel.add(new JLabel("Confirmar contraseña:"));
+    panel.add(txtConfirmPassword);
+    panel.add(new JLabel("Rol:"));
+    panel.add(cmbRol);
+    
+    int resultado = JOptionPane.showConfirmDialog(
+        this, 
+        panel, 
+        "Crear Cuenta - SIBAL", 
+        JOptionPane.OK_CANCEL_OPTION, 
+        JOptionPane.PLAIN_MESSAGE
+    );
+    
+    if (resultado == JOptionPane.OK_OPTION) {
+        String nombre = txtNombre.getText().trim();
+        String usuario = txtUsuario.getText().trim();
+        String password = new String(txtPassword.getPassword());
+        String confirmPassword = new String(txtConfirmPassword.getPassword());
+        String rol = (String) cmbRol.getSelectedItem();
+        
+        // Validaciones
+        if (nombre.isEmpty() || usuario.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this, 
+                "Todos los campos son obligatorios", 
+                "Campos vacíos", 
+                JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+        
+        if (password.length() < 4) {
+            JOptionPane.showMessageDialog(
+                this, 
+                "La contraseña debe tener al menos 4 caracteres", 
+                "Contraseña débil", 
+                JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+        
+        if (!password.equals(confirmPassword)) {
+            JOptionPane.showMessageDialog(
+                this, 
+                "Las contraseñas no coinciden", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+        
+        // Crear objeto Usuario
+        Usuario nuevoUsuario = new Usuario(nombre, usuario, password, rol);
+        
+        // Registrar en BD
+        ControlRegistro controlRegistro = new ControlRegistro();
+        boolean registrado = controlRegistro.registrarUsuario(nuevoUsuario);
+        
+        if (registrado) {
+            JOptionPane.showMessageDialog(
+                this, 
+                "¡Cuenta creada exitosamente!\n" +
+                "Usuario: " + usuario + "\n" +
+                "Rol: " + rol + "\n\n" +
+                "Ya puedes iniciar sesión", 
+                "Registro exitoso", 
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        } else {
+            JOptionPane.showMessageDialog(
+                this, 
+                "No se pudo crear la cuenta.\n" +
+                "El usuario podría ya existir.", 
+                "Error de registro", 
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnIniciarSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSActionPerformed
+        // Crear un panel personalizado para el login
+    JPanel panel = new JPanel(new GridLayout(2, 2, 10, 10));
+    JTextField txtUsuario = new JTextField(15);
+    JPasswordField txtPassword = new JPasswordField(15);
+    
+    panel.add(new JLabel("Usuario:"));
+    panel.add(txtUsuario);
+    panel.add(new JLabel("Contraseña:"));
+    panel.add(txtPassword);
+    
+    int resultado = JOptionPane.showConfirmDialog(
+        this, 
+        panel, 
+        "Iniciar Sesión - SIBAL", 
+        JOptionPane.OK_CANCEL_OPTION, 
+        JOptionPane.PLAIN_MESSAGE
+    );
+    
+    if (resultado == JOptionPane.OK_OPTION) {
+        String usuario = txtUsuario.getText().trim();
+        String password = new String(txtPassword.getPassword());
+        
+        // Validar que no estén vacíos
+        if (usuario.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this, 
+                "Por favor completa todos los campos", 
+                "Campos vacíos", 
+                JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+        
+        // Validar credenciales
+        ValidarAcceso validador = new ValidarAcceso();
+        Usuario user = validador.iniciarSesion(usuario, password);
+        
+        if (user != null) {
+            // Guardar sesión
+            Sesion.getInstancia().iniciarSesion(user);
+            
+            JOptionPane.showMessageDialog(
+                this, 
+                "¡Bienvenido " + user.getNombre() + "!\nRol: " + user.getRol(), 
+                "Inicio exitoso", 
+                JOptionPane.INFORMATION_MESSAGE
+            );
+            
+            // Abrir ventana principal (ajusta el nombre según tu formulario)
+            new frmPrincipal().setVisible(true);
+            this.dispose();  // Cerrar ventana de inicio
+            
+        } else {
+            JOptionPane.showMessageDialog(
+                this, 
+                "Usuario o contraseña incorrectos.\nVerifica tus credenciales.", 
+                "Error de acceso", 
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+        
+        
+    }//GEN-LAST:event_btnIniciarSActionPerformed
 
     /**
      * @param args the command line arguments

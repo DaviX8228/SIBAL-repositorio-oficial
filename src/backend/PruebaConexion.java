@@ -13,9 +13,9 @@ public class PruebaConexion {
     public static void main(String[] args) {
         Connection conn = ConexionBD.conectar();
         if (conn != null) {
-            System.out.println("✅ Conexión establecida correctamente.");
+            System.out.println("Conexión establecida correctamente.");
         } else {
-            System.out.println("❌ No se pudo conectar.");
+            System.out.println("No se pudo conectar.");
         }
     }
     

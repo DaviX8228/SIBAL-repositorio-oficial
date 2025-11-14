@@ -30,10 +30,10 @@ public class ControlProductos {
             ps.setInt(6, idProveedor);
             ps.executeUpdate();
             exito = true;
-            System.out.println("✅ Producto agregado correctamente.");
+            System.out.println("Producto agregado correctamente.");
             conexion.close();
         } catch (SQLException e) {
-            System.out.println("❌ Error al agregar producto: " + e.getMessage());
+            System.out.println("Error al agregar producto: " + e.getMessage());
         }
         return exito;
     }
@@ -50,10 +50,10 @@ public class ControlProductos {
             ps.setInt(2, idProducto);
             ps.executeUpdate();
             exito = true;
-            System.out.println("🔁 Stock actualizado correctamente.");
+            System.out.println("Stock actualizado correctamente.");
             conexion.close();
         } catch (SQLException e) {
-            System.out.println("❌ Error al actualizar stock: " + e.getMessage());
+            System.out.println("Error al actualizar stock: " + e.getMessage());
         }
         return exito;
     }
@@ -69,10 +69,10 @@ public class ControlProductos {
             ps.setInt(1, idProducto);
             ps.executeUpdate();
             exito = true;
-            System.out.println("🗑️ Producto eliminado correctamente.");
+            System.out.println("Producto eliminado correctamente.");
             conexion.close();
         } catch (SQLException e) {
-            System.out.println("❌ Error al eliminar producto: " + e.getMessage());
+            System.out.println("Error al eliminar producto: " + e.getMessage());
         }
         return exito;
     }
@@ -93,7 +93,7 @@ public class ControlProductos {
             }
             conexion.close();
         } catch (SQLException e) {
-            System.out.println("❌ Error al consultar productos: " + e.getMessage());
+            System.out.println("Error al consultar productos: " + e.getMessage());
         }
         return productos;
     }

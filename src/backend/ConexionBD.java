@@ -24,9 +24,9 @@ public class ConexionBD {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conexion = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("✅ Conexión exitosa a la base de datos SIBAL.");
+            System.out.println("Conexión exitosa a la base de datos SIBAL.");
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("❌ Error al conectar: " + e.getMessage());
+            System.out.println("Error al conectar: " + e.getMessage());
         }
         return conexion;
     }
