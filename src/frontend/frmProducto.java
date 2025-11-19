@@ -61,7 +61,7 @@ public class frmProducto extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(322, Short.MAX_VALUE)
+                .addContainerGap(319, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(215, 215, 215))
         );
@@ -70,7 +70,7 @@ public class frmProducto extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 770, 70));
@@ -89,10 +89,6 @@ public class frmProducto extends javax.swing.JFrame {
             }
         ));
         jScrollPane2.setViewportView(tblProducto);
-
-        btnAgregarPR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnagregarp.png"))); // NOI18N
-
-        btnBuscarPR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnBuscar.png"))); // NOI18N
 
         javax.swing.GroupLayout panProductosLayout = new javax.swing.GroupLayout(panProductos);
         panProductos.setLayout(panProductosLayout);
@@ -136,8 +132,6 @@ public class frmProducto extends javax.swing.JFrame {
         txteDescripcionPr.setBorder(javax.swing.BorderFactory.createTitledBorder("DESCRIPCION"));
 
         txteFechaPr.setBorder(javax.swing.BorderFactory.createTitledBorder("FECHA"));
-
-        btnGuardarPR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnguardar.png"))); // NOI18N
 
         txteCategoria.setBorder(javax.swing.BorderFactory.createTitledBorder("CATEGORIA"));
 

@@ -94,7 +94,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addGap(8, 8, 8)
                 .addComponent(lblUsua, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(btnSalir)
                 .addGap(20, 20, 20))
@@ -104,7 +104,6 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lblFondo1.png"))); // NOI18N
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
@@ -120,7 +119,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,7 +141,6 @@ public class frmPrincipal extends javax.swing.JFrame {
         jLabel4.setText("¿Que desea revisar hoy?");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 130, -1, -1));
 
-        btnProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnProductos.jpg"))); // NOI18N
         btnProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProductoActionPerformed(evt);
@@ -150,7 +148,6 @@ public class frmPrincipal extends javax.swing.JFrame {
         });
         getContentPane().add(btnProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 330, 80, 80));
 
-        btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnUsuario.png"))); // NOI18N
         btnUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUsuarioActionPerformed(evt);
@@ -158,7 +155,6 @@ public class frmPrincipal extends javax.swing.JFrame {
         });
         getContentPane().add(btnUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 180, 80, 80));
 
-        btnProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnProveedor.jpg"))); // NOI18N
         btnProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProveedorActionPerformed(evt);
@@ -166,7 +162,6 @@ public class frmPrincipal extends javax.swing.JFrame {
         });
         getContentPane().add(btnProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, 80, 80));
 
-        btnMovimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnMovimientos.jpg"))); // NOI18N
         btnMovimiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMovimientoActionPerformed(evt);
@@ -197,12 +192,13 @@ public class frmPrincipal extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         // TODO add your handling code here:
-
+        System.exit(0);
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductoActionPerformed
         // TODO add your handling code here:
-
+        dispose(); // Cierra la ventana actual
+        new frmProducto().setVisible(true); // Abre frmProducto
     }//GEN-LAST:event_btnProductoActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
@@ -218,7 +214,8 @@ public class frmPrincipal extends javax.swing.JFrame {
 
     private void btnMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimientoActionPerformed
         // TODO add your handling code here:
-
+        dispose();
+        new frmMovimiento().setVisible(true);
     }//GEN-LAST:event_btnMovimientoActionPerformed
 
     /**

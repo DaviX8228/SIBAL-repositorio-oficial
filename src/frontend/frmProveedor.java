@@ -87,8 +87,6 @@ public class frmProveedor extends javax.swing.JFrame {
 
         txteDireccionP.setBorder(javax.swing.BorderFactory.createTitledBorder("DIRECCION"));
 
-        btnGuardarP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnguardar.png"))); // NOI18N
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -162,14 +160,14 @@ public class frmProveedor extends javax.swing.JFrame {
         jScrollPane3.setViewportView(tblProveedores);
 
         getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 650, 170));
-
-        btnBorrarP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnborrar.png"))); // NOI18N
         getContentPane().add(btnBorrarP, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 280, 80, 80));
 
-        btnEditarP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btneditar.png"))); // NOI18N
+        btnEditarP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarPActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnEditarP, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 150, 80, 80));
-
-        btnAgregarP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnagregar.png"))); // NOI18N
         getContentPane().add(btnAgregarP, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 410, 80, 80));
 
         pack();
@@ -181,6 +179,10 @@ public class frmProveedor extends javax.swing.JFrame {
         dispose();
         new frmPrincipal().setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnEditarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditarPActionPerformed
 
     /**
      * @param args the command line arguments
