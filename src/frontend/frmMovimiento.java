@@ -4,17 +4,104 @@
  */
 package frontend;
 
+import backend.ConexionBD;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author MISAEL JIMENEZ
  */
 public class frmMovimiento extends javax.swing.JFrame {
-
+    
+    Connection con = ConexionBD.conectar();
+    
     /**
      * Creates new form frmMovimiento
      */
     public frmMovimiento() {
         initComponents();
+        java.util.Date fecha = new java.util.Date();
+        java.text.SimpleDateFormat formato = new java.text.SimpleDateFormat("dd/MM/yyyy");
+        txteFecha.setText(formato.format(fecha));
+    }
+    
+    
+    private int guardarMovimiento() {
+        String producto = txteProducto.getText();
+        String tipo = cboOperacion.getSelectedItem().toString();
+        String fechaTxt = txteFecha.getText(); // dd/MM/yyyy
+        int cantidad = Integer.parseInt(txteCantidad.getText());
+        String observaciones = txteMovimiento.getText();
+
+        int idGenerado = -1;
+
+        try {
+            // Convertir fecha dd/MM/yyyy → yyyy-MM-dd (MySQL)
+            java.util.Date fechaUsuario =
+                new java.text.SimpleDateFormat("dd/MM/yyyy").parse(fechaTxt);
+            String fechaSQL =
+                new java.text.SimpleDateFormat("yyyy-MM-dd").format(fechaUsuario);
+
+            // Obtener ID del producto
+            String sqlProd = "SELECT id_producto FROM productos WHERE nombre = ?";
+            PreparedStatement psProd = con.prepareStatement(sqlProd);
+            psProd.setString(1, producto);
+
+            ResultSet rsProd = psProd.executeQuery();
+
+            if (!rsProd.next()) {
+                JOptionPane.showMessageDialog(this, "El producto no existe.");
+                return -1;
+            }
+
+            int idProducto = rsProd.getInt("id_producto");
+            psProd.close();
+
+            // Insertar movimiento
+            String sql = "INSERT INTO movimientos " +
+                         "(tipo_movimiento, cantidad, id_producto, fecha, observaciones) " +
+                         "VALUES (?, ?, ?, ?, ?)";
+
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, tipo);
+            ps.setInt(2, cantidad);
+            ps.setInt(3, idProducto);
+            ps.setString(4, fechaSQL);
+            ps.setString(5, observaciones);
+
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                idGenerado = rs.getInt(1);
+            }
+
+            ps.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage());
+        }
+
+        return idGenerado;
+    }
+    
+    
+    private void generarTicket(int id) {
+        String ticket =
+                "=== TICKET DE MOVIMIENTO ===\n" +
+                "ID: " + id + "\n" +
+                "Producto: " + txteProducto.getText() + "\n" +
+                "Tipo: " + cboOperacion.getSelectedItem().toString() + "\n" +
+                "Cantidad: " + txteCantidad.getText() + "\n" +
+                "Fecha: " + txteFecha.getText() + "\n" +
+                "Observaciones: " + txteMovimiento.getText() + "\n" +
+                "============================";
+
+        lblTicket.setText("<html>" + ticket.replace("\n", "<br>") + "</html>");
     }
 
     /**
@@ -199,6 +286,14 @@ public class frmMovimiento extends javax.swing.JFrame {
 
     private void btnReciboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReciboActionPerformed
         // TODO add your handling code here:
+        int id = guardarMovimiento();
+
+        if (id > 0) {
+            generarTicket(id);
+            JOptionPane.showMessageDialog(this, "Movimiento registrado correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo registrar el movimiento.");
+        }
     }//GEN-LAST:event_btnReciboActionPerformed
 
     /**
