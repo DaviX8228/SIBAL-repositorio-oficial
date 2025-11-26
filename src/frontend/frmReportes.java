@@ -33,7 +33,7 @@ public class frmReportes extends javax.swing.JFrame {
                      "LEFT JOIN categorias c ON p.id_categoria = c.id_categoria " +
                      "LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor";
 
-        try (Connection con = ConexionBD.getConexion();
+        try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -64,7 +64,7 @@ public class frmReportes extends javax.swing.JFrame {
 
         String sql = "SELECT COUNT(*) AS total FROM productos WHERE stock < 10";
 
-        try (Connection con = ConexionBD.getConexion();
+        try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -82,7 +82,7 @@ public class frmReportes extends javax.swing.JFrame {
     private void cargarProductosBajos() {
         String sql = "SELECT id_producto, nombre, stock FROM productos WHERE stock < 10";
 
-        try (Connection con = ConexionBD.getConexion();
+        try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -114,7 +114,7 @@ public class frmReportes extends javax.swing.JFrame {
                      "INNER JOIN usuarios u ON m.id_usuario = u.id_usuario " +
                      "WHERE m.tipo_movimiento = 'Entrada' AND DATE(m.fecha) = CURRENT_DATE";
 
-        try (Connection con = ConexionBD.getConexion();
+        try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -147,7 +147,7 @@ public class frmReportes extends javax.swing.JFrame {
                      "INNER JOIN usuarios u ON m.id_usuario = u.id_usuario " +
                      "WHERE m.tipo_movimiento = 'Salida' AND DATE(m.fecha) = CURRENT_DATE";
 
-        try (Connection con = ConexionBD.getConexion();
+        try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -281,7 +281,7 @@ public class frmReportes extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(chboxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGenerar))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(panTReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 630, 50));
@@ -364,7 +364,7 @@ public class frmReportes extends javax.swing.JFrame {
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 570, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel4.setText("CERRAR");
+        jLabel4.setText("VOLVER");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 570, -1, -1));
 
         pack();

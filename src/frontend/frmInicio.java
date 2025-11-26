@@ -14,7 +14,7 @@ import seguridad.ValidarAcceso;
 
 /**
  *
- * @author MISAEL JIMENEZ
+ * @author MISAEL JIMENEZ (frontend) DAVID VELAZQUEZ (backend y seguridad)
  */
 public class frmInicio extends javax.swing.JFrame {
 
@@ -51,7 +51,7 @@ public class frmInicio extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 0, 0));
         jLabel1.setText("Bienvenid@ al Sistema SIBAL");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 25, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, -1));
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
@@ -59,7 +59,7 @@ public class frmInicio extends javax.swing.JFrame {
         jTextArea1.setText("\nGestiona fácilmente el inventario, registra movimientos de entrada y salida.\n    Controla proveedores y administra usuarios, todo desde un solo lugar.");
         jScrollPane1.setViewportView(jTextArea1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 70, 425, -1));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 425, -1));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -110,7 +110,7 @@ public class frmInicio extends javax.swing.JFrame {
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(161, 174, -1, -1));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 200, -1, -1));
         getContentPane().add(lblFondoI, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 340));
 
         pack();
@@ -118,102 +118,13 @@ public class frmInicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-         // Crear panel personalizado para registro
-    JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
+         
+
+    frmTerminos ventanaTerminos = new frmTerminos(this);
+    ventanaTerminos.setVisible(true);
     
-    JTextField txtNombre = new JTextField(15);
-    JTextField txtUsuario = new JTextField(15);
-    JPasswordField txtPassword = new JPasswordField(15);
-    JPasswordField txtConfirmPassword = new JPasswordField(15);
-    
-    // ComboBox para el rol
-    String[] roles = {"Encargado", "Administrador"};
-    JComboBox<String> cmbRol = new JComboBox<>(roles);
-    
-    panel.add(new JLabel("Nombre completo:"));
-    panel.add(txtNombre);
-    panel.add(new JLabel("Usuario:"));
-    panel.add(txtUsuario);
-    panel.add(new JLabel("Contraseña:"));
-    panel.add(txtPassword);
-    panel.add(new JLabel("Confirmar contraseña:"));
-    panel.add(txtConfirmPassword);
-    panel.add(new JLabel("Rol:"));
-    panel.add(cmbRol);
-    
-    int resultado = JOptionPane.showConfirmDialog(
-        this, 
-        panel, 
-        "Crear Cuenta - SIBAL", 
-        JOptionPane.OK_CANCEL_OPTION, 
-        JOptionPane.PLAIN_MESSAGE
-    );
-    
-    if (resultado == JOptionPane.OK_OPTION) {
-        String nombre = txtNombre.getText().trim();
-        String usuario = txtUsuario.getText().trim();
-        String password = new String(txtPassword.getPassword());
-        String confirmPassword = new String(txtConfirmPassword.getPassword());
-        String rol = (String) cmbRol.getSelectedItem();
-        
-        // Validaciones
-        if (nombre.isEmpty() || usuario.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(
-                this, 
-                "Todos los campos son obligatorios", 
-                "Campos vacíos", 
-                JOptionPane.WARNING_MESSAGE
-            );
-            return;
-        }
-        
-        if (password.length() < 4) {
-            JOptionPane.showMessageDialog(
-                this, 
-                "La contraseña debe tener al menos 4 caracteres", 
-                "Contraseña débil", 
-                JOptionPane.WARNING_MESSAGE
-            );
-            return;
-        }
-        
-        if (!password.equals(confirmPassword)) {
-            JOptionPane.showMessageDialog(
-                this, 
-                "Las contraseñas no coinciden", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE
-            );
-            return;
-        }
-        
-        // Crear objeto Usuario
-        Usuario nuevoUsuario = new Usuario(nombre, usuario, password, rol);
-        
-        // Registrar en BD
-        ControlRegistro controlRegistro = new ControlRegistro();
-        boolean registrado = controlRegistro.registrarUsuario(nuevoUsuario);
-        
-        if (registrado) {
-            JOptionPane.showMessageDialog(
-                this, 
-                "¡Cuenta creada exitosamente!\n" +
-                "Usuario: " + usuario + "\n" +
-                "Rol: " + rol + "\n\n" +
-                "Ya puedes iniciar sesión", 
-                "Registro exitoso", 
-                JOptionPane.INFORMATION_MESSAGE
-            );
-        } else {
-            JOptionPane.showMessageDialog(
-                this, 
-                "No se pudo crear la cuenta.\n" +
-                "El usuario podría ya existir.", 
-                "Error de registro", 
-                JOptionPane.ERROR_MESSAGE
-            );
-        }
-    }
+    // Entoncees pues el registro comenzará en frmTerminos si es que el usaurio acepta
+
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnIniciarSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSActionPerformed

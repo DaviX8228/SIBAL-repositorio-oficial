@@ -4,17 +4,262 @@
  */
 package frontend;
 
+import backend.ControlProductos;
+import backend.Producto;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 /**
  *
  * @author MISAEL JIMENEZ
  */
 public class frmCotizaciones extends javax.swing.JFrame {
 
-    /**
-     * Creates new form frmCotizaciones
-     */
+    
+      private Producto productoSeleccionado;
+    private List<Producto> todosLosProductos;
+    private ButtonGroup grupoRoles;
+
+    // Constructor que recibe el producto seleccionado
+    public frmCotizaciones(Producto producto) {
+        initComponents();
+        this.productoSeleccionado = producto;
+        configurarFormulario();
+        cargarProducto();
+        cargarListaProductos();
+    }
+    
+    // Constructor vacío (por si se abre sin producto)
     public frmCotizaciones() {
         initComponents();
+        configurarFormulario();
+        cargarListaProductos();
+    }
+
+    private void configurarFormulario() {
+        // Configurar grupo de radio buttons
+        grupoRoles = new ButtonGroup();
+        grupoRoles.add(rdbGerente);
+        grupoRoles.add(rdbUsuario);
+        rdbUsuario.setSelected(true); // Usuario por defecto
+        
+        // Hacer el TextArea no editable
+        txtaInformacion.setEditable(false);
+        txtaInformacion.setLineWrap(true);
+        txtaInformacion.setWrapStyleWord(true);
+    }
+
+    // Cargar el producto seleccionado en el campo
+    private void cargarProducto() {
+        if (productoSeleccionado != null) {
+            txteProducto.setText(productoSeleccionado.getNombre());
+            txteCantidad.setText("1"); // Cantidad por defecto
+            mostrarInformacionProducto();
+        }
+    }
+
+    // Cargar lista visual de productos disponibles
+    private void cargarListaProductos() {
+        todosLosProductos = ControlProductos.obtenerTodosLosProductos();
+        
+        // Crear un panel con scroll para mostrar productos
+        JPanel panelProductos = new JPanel();
+        panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
+        panelProductos.setBackground(Color.WHITE);
+        
+        for (Producto p : todosLosProductos) {
+            JLabel lblProducto = new JLabel(
+                String.format("<html><b>%s</b><br>Stock: %d | Precio: $%.2f</html>", 
+                    p.getNombre(), p.getStock(), p.getPrecioUnitario())
+            );
+            lblProducto.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            lblProducto.setOpaque(true);
+            lblProducto.setBackground(Color.WHITE);
+            lblProducto.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            
+            // Click para seleccionar producto
+            lblProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    productoSeleccionado = p;
+                    txteProducto.setText(p.getNombre());
+                    txteCantidad.setText("1");
+                    limpiarInformacion();
+                }
+                
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    lblProducto.setBackground(new Color(230, 230, 230));
+                }
+                
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    lblProducto.setBackground(Color.WHITE);
+                }
+            });
+            
+            panelProductos.add(lblProducto);
+            panelProductos.add(Box.createVerticalStrut(2));
+        }
+        
+        JScrollPane scrollProductos = new JScrollPane(panelProductos);
+        scrollProductos.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollProductos.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        
+        // Limpiar el label y agregar el scroll
+        lblProductos.setLayout(new BorderLayout());
+        lblProductos.removeAll();
+        lblProductos.add(scrollProductos, BorderLayout.CENTER);
+        lblProductos.revalidate();
+        lblProductos.repaint();
+    }
+
+    // Mostrar información del producto
+    private void mostrarInformacionProducto() {
+        if (productoSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Seleccione un producto de la lista", 
+                "Aviso", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Validar cantidad
+        int cantidad;
+        try {
+            cantidad = Integer.parseInt(txteCantidad.getText().trim());
+            if (cantidad <= 0) {
+                JOptionPane.showMessageDialog(this, 
+                    "La cantidad debe ser mayor a 0", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Ingrese una cantidad válida", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Verificar stock disponible
+        if (cantidad > productoSeleccionado.getStock()) {
+            JOptionPane.showMessageDialog(this, 
+                "Stock insuficiente. Disponible: " + productoSeleccionado.getStock(), 
+                "Advertencia", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Calcular precios según rol
+        double precioUnitario = productoSeleccionado.getPrecioUnitario();
+        double descuento = 0;
+        String rol = rdbGerente.isSelected() ? "Gerente" : "Usuario";
+        
+        // Aplicar descuento si es gerente (ejemplo: 10%)
+        if (rdbGerente.isSelected()) {
+            descuento = 0.10;
+        }
+        
+        double subtotal = precioUnitario * cantidad;
+        double montoDescuento = subtotal * descuento;
+        double total = subtotal - montoDescuento;
+        
+        // Formatear fecha
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        String fecha = productoSeleccionado.getFechaRegistro() != null ? 
+            formato.format(productoSeleccionado.getFechaRegistro()) : "N/A";
+        
+        // Mostrar información
+        StringBuilder info = new StringBuilder();
+        info.append("═══════════════════════════════════════\n");
+        info.append("                 * S I B A L *         \n");
+        info.append("═══════════════════════════════════════\n");
+        info.append("         INFORMACIÓN DEL PRODUCTO\n");
+        info.append("═══════════════════════════════════════\n\n");
+        info.append("ID: ").append(productoSeleccionado.getIdProducto()).append("\n");
+        info.append("Nombre: ").append(productoSeleccionado.getNombre()).append("\n");
+        info.append("Descripción: ").append(productoSeleccionado.getDescripcion()).append("\n");
+        info.append("Stock disponible: ").append(productoSeleccionado.getStock()).append(" unidades\n");
+        info.append("Categoría ID: ").append(productoSeleccionado.getIdCategoria()).append("\n");
+        info.append("Fecha de registro: ").append(fecha).append("\n\n");
+        
+        info.append("───────────────────────────────────────\n");
+        info.append("         DETALLES DE COTIZACIÓN\n");
+        info.append("───────────────────────────────────────\n\n");
+        info.append("Rol: ").append(rol).append("\n");
+        info.append("Precio unitario: $").append(String.format("%.2f", precioUnitario)).append("\n");
+        info.append("Cantidad solicitada: ").append(cantidad).append("\n");
+        info.append("Subtotal: $").append(String.format("%.2f", subtotal)).append("\n");
+        
+        if (descuento > 0) {
+            info.append("Descuento (").append((int)(descuento * 100)).append("%): -$")
+                .append(String.format("%.2f", montoDescuento)).append("\n");
+        }
+        
+        info.append("\n═══════════════════════════════════════\n");
+        info.append("TOTAL A PAGAR: $").append(String.format("%.2f", total)).append("\n");
+        info.append("═══════════════════════════════════════\n");
+        
+        txtaInformacion.setText(info.toString());
+        txtaInformacion.setCaretPosition(0); // Scroll al inicio
+    }
+
+    // Limpiar información
+    private void limpiarInformacion() {
+        txtaInformacion.setText("");
+    }
+
+// Generar ticket - Pasar a frmMovimiento
+    private void generarTicket() {
+        if (txtaInformacion.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Primero debe ver la información del producto", 
+                "Aviso", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if (productoSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, 
+                "No hay producto seleccionado", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Obtener cantidad
+        int cantidad;
+        try {
+            cantidad = Integer.parseInt(txteCantidad.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Cantidad inválida", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Confirmar y pasar a frmMovimiento
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Desea generar el ticket y registrar el movimiento?", 
+            "Confirmar", 
+            JOptionPane.YES_NO_OPTION);
+        
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            // Pasar producto y cantidad a frmMovimiento
+            this.dispose();
+            new frmMovimiento(productoSeleccionado, cantidad).setVisible(true);
+        }
     }
 
     /**
@@ -79,13 +324,16 @@ public class frmCotizaciones extends javax.swing.JFrame {
         btnVer.setBackground(new java.awt.Color(51, 0, 0));
         btnVer.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnVer.setText("VER");
+        btnVer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerActionPerformed(evt);
+            }
+        });
 
         txteProducto.setBackground(new java.awt.Color(204, 204, 204));
-        txteProducto.setText("jTextField1");
         txteProducto.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Producto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
 
         txteCantidad.setBackground(new java.awt.Color(204, 204, 204));
-        txteCantidad.setText("jTextField1");
         txteCantidad.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Cantidad", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
         txteCantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,6 +344,7 @@ public class frmCotizaciones extends javax.swing.JFrame {
         jScrollPane1.setBackground(new java.awt.Color(204, 204, 204));
         jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "INFORMACION DEL PRODUCTO", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
 
+        txtaInformacion.setEditable(false);
         txtaInformacion.setBackground(new java.awt.Color(204, 204, 204));
         txtaInformacion.setColumns(20);
         txtaInformacion.setRows(5);
@@ -116,11 +365,16 @@ public class frmCotizaciones extends javax.swing.JFrame {
 
         rdbGerente.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         rdbGerente.setForeground(new java.awt.Color(0, 0, 0));
-        rdbGerente.setText("Gerente");
+        rdbGerente.setText("Administrador");
+        rdbGerente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbGerenteActionPerformed(evt);
+            }
+        });
 
         rdbUsuario.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         rdbUsuario.setForeground(new java.awt.Color(0, 0, 0));
-        rdbUsuario.setText("Usuario");
+        rdbUsuario.setText("Encargado");
 
         javax.swing.GroupLayout lblRolLayout = new javax.swing.GroupLayout(lblRol);
         lblRol.setLayout(lblRolLayout);
@@ -214,12 +468,22 @@ public class frmCotizaciones extends javax.swing.JFrame {
     }//GEN-LAST:event_txteCantidadActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
+        new frmProducto().setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    private void btnTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTicketActionPerformed
+    private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
         // TODO add your handling code here:
+        mostrarInformacionProducto();
+    }//GEN-LAST:event_btnVerActionPerformed
+
+    private void btnTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTicketActionPerformed
+        generarTicket();
     }//GEN-LAST:event_btnTicketActionPerformed
+
+    private void rdbGerenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbGerenteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rdbGerenteActionPerformed
 
     /**
      * @param args the command line arguments

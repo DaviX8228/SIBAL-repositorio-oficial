@@ -5,64 +5,142 @@
 package frontend;
 
 import backend.ConexionBD;
+import backend.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author MISAEL JIMENEZ
+ * @author MISAEL JIMENEZ (frontend) DAVID VELAZQUEZ (backend)
  */
 public class frmMovimiento extends javax.swing.JFrame {
     
-    Connection con = ConexionBD.conectar();
+    private Producto productoSeleccionado;
+    private int cantidadCotizada;
     
-    /**
-     * Creates new form frmMovimiento
-     */
-    public frmMovimiento() {
+    // Constructor que recibe producto y cantidad desde frmCotizaciones
+    public frmMovimiento(Producto producto, int cantidad) {
         initComponents();
-        java.util.Date fecha = new java.util.Date();
-        java.text.SimpleDateFormat formato = new java.text.SimpleDateFormat("dd/MM/yyyy");
-        txteFecha.setText(formato.format(fecha));
+        this.productoSeleccionado = producto;
+        this.cantidadCotizada = cantidad;
+        configurarFormulario();
+        cargarDatosProducto();
     }
     
+    // Constructor vacío (por si se abre directamente)
+    public frmMovimiento() {
+        initComponents();
+        configurarFormulario();
+    }
+
+    private void configurarFormulario() {
+        // Configurar fecha actual
+        java.util.Date fecha = new java.util.Date();
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        txteFecha.setText(formato.format(fecha));
+        txteFecha.setEditable(false);
+        
+        // Configurar combo de operaciones
+        cboOperacion.setSelectedIndex(0);
+    }
+    
+    // Cargar datos del producto en el formulario
+    private void cargarDatosProducto() {
+        if (productoSeleccionado != null) {
+            txteProducto.setText(productoSeleccionado.getNombre());
+            txteCantidad.setText(String.valueOf(cantidadCotizada));
+            
+            // Agregar información adicional en observaciones
+            txteMovimiento.setText(
+                "Producto: " + productoSeleccionado.getNombre() + "\n" +
+                "Descripción: " + productoSeleccionado.getDescripcion() + "\n" +
+                "Stock actual: " + productoSeleccionado.getStock() + "\n" +
+                "Precio unitario: $" + productoSeleccionado.getPrecioUnitario()
+            );
+        }
+    }
+    
+    private boolean validarCampos() {
+        if (txteProducto.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese el nombre del producto", "Validación", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        if (cboOperacion.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione el tipo de operación", "Validación", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        if (txteCantidad.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese la cantidad", "Validación", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        try {
+            int cantidad = Integer.parseInt(txteCantidad.getText().trim());
+            if (cantidad <= 0) {
+                JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0", "Validación", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La cantidad debe ser un número válido", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        return true;
+    }
     
     private int guardarMovimiento() {
-        String producto = txteProducto.getText();
+        if (!validarCampos()) {
+            return -1;
+        }
+        
+        String producto = txteProducto.getText().trim();
         String tipo = cboOperacion.getSelectedItem().toString();
-        String fechaTxt = txteFecha.getText(); // dd/MM/yyyy
-        int cantidad = Integer.parseInt(txteCantidad.getText());
-        String observaciones = txteMovimiento.getText();
+        String fechaTxt = txteFecha.getText();
+        int cantidad = Integer.parseInt(txteCantidad.getText().trim());
+        String observaciones = txteMovimiento.getText().trim();
 
         int idGenerado = -1;
+        Connection con = null;
 
         try {
+            con = ConexionBD.conectar();
+            
             // Convertir fecha dd/MM/yyyy → yyyy-MM-dd (MySQL)
-            java.util.Date fechaUsuario =
-                new java.text.SimpleDateFormat("dd/MM/yyyy").parse(fechaTxt);
-            String fechaSQL =
-                new java.text.SimpleDateFormat("yyyy-MM-dd").format(fechaUsuario);
+            java.util.Date fechaUsuario = new SimpleDateFormat("dd/MM/yyyy").parse(fechaTxt);
+            String fechaSQL = new SimpleDateFormat("yyyy-MM-dd").format(fechaUsuario);
 
             // Obtener ID del producto
-            String sqlProd = "SELECT id_producto FROM productos WHERE nombre = ?";
+            String sqlProd = "SELECT id_producto, stock FROM Productos WHERE nombre = ?";
             PreparedStatement psProd = con.prepareStatement(sqlProd);
             psProd.setString(1, producto);
-
             ResultSet rsProd = psProd.executeQuery();
 
             if (!rsProd.next()) {
-                JOptionPane.showMessageDialog(this, "El producto no existe.");
+                JOptionPane.showMessageDialog(this, "El producto '" + producto + "' no existe en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
                 return -1;
             }
 
             int idProducto = rsProd.getInt("id_producto");
+            int stockActual = rsProd.getInt("stock");
             psProd.close();
+            
+            // Validar stock si es salida
+            if (tipo.equals("SALIDA") && cantidad > stockActual) {
+                JOptionPane.showMessageDialog(this, 
+                    "Stock insuficiente. Disponible: " + stockActual + " unidades", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+                return -1;
+            }
 
-            // Insertar movimiento
-            String sql = "INSERT INTO movimientos " +
+            // Insertar movimiento (sin id_usuario por ahora, puedes agregarlo después)
+            String sql = "INSERT INTO Movimientos " +
                          "(tipo_movimiento, cantidad, id_producto, fecha, observaciones) " +
                          "VALUES (?, ?, ?, ?, ?)";
 
@@ -79,36 +157,75 @@ public class frmMovimiento extends javax.swing.JFrame {
             if (rs.next()) {
                 idGenerado = rs.getInt(1);
             }
-
             ps.close();
+            
+            // Actualizar stock del producto
+            int nuevoStock = tipo.equals("ENTRADA") ? 
+                stockActual + cantidad : stockActual - cantidad;
+            
+            String sqlUpdate = "UPDATE Productos SET stock = ? WHERE id_producto = ?";
+            PreparedStatement psUpdate = con.prepareStatement(sqlUpdate);
+            psUpdate.setInt(1, nuevoStock);
+            psUpdate.setInt(2, idProducto);
+            psUpdate.executeUpdate();
+            psUpdate.close();
+            
+            System.out.println("✓ Movimiento guardado y stock actualizado");
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, 
+                "Error al guardar movimiento: " + e.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (con != null && !con.isClosed()) {
+                    con.close();
+                }
+            } catch (Exception e) { //Aquí dbería de ir SQLException pero bn, no sé porque no me dejó.
+                e.printStackTrace();
+            }
         }
 
         return idGenerado;
     }
     
-    
     private void generarTicket(int id) {
+        String tipo = cboOperacion.getSelectedItem().toString();
+        String cantidad = txteCantidad.getText();
+        String fecha = txteFecha.getText();
+        String observaciones = txteMovimiento.getText();
+        
+        // Calcular total si hay precio
+        String totalStr = "";
+        if (productoSeleccionado != null) {
+            double total = productoSeleccionado.getPrecioUnitario() * Integer.parseInt(cantidad);
+            totalStr = "\nTotal: $" + String.format("%.2f", total);
+        }
+        
         String ticket =
-                "=== TICKET DE MOVIMIENTO ===\n" +
-                "ID: " + id + "\n" +
+                
+                "╔══════════════════════════════╗\n" +
+                "║       * S I B A L *       ║\n" +
+                "║   TICKET DE MOVIMIENTO    ║\n" +
+                "╚══════════════════════════════╝\n\n" +
+                "ID Movimiento: " + id + "\n" +
+                "────────────────────────────────\n" +
                 "Producto: " + txteProducto.getText() + "\n" +
-                "Tipo: " + cboOperacion.getSelectedItem().toString() + "\n" +
-                "Cantidad: " + txteCantidad.getText() + "\n" +
-                "Fecha: " + txteFecha.getText() + "\n" +
-                "Observaciones: " + txteMovimiento.getText() + "\n" +
-                "============================";
+                "Tipo: " + tipo + "\n" +
+                "Cantidad: " + cantidad + " unidades\n" +
+                "Fecha: " + fecha + totalStr + "\n\n" +
+                "Observaciones:\n" +
+                observaciones + "\n" +
+                "────────────────────────────────\n" +
+                "   Movimiento registrado   \n" +
+                "════════════════════════════════";
 
-        lblTicket.setText("<html>" + ticket.replace("\n", "<br>") + "</html>");
+        lblTicket.setText("<html><pre style='font-family:monospace;'>" + 
+                         ticket.replace("\n", "<br>") + "</pre></html>");
     }
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -159,10 +276,10 @@ public class frmMovimiento extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         txteProducto.setBackground(new java.awt.Color(204, 204, 204));
-        txteProducto.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Producto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        txteProducto.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Producto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
 
         txteCantidad.setBackground(new java.awt.Color(204, 204, 204));
-        txteCantidad.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cantidad", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        txteCantidad.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Cantidad", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
         txteCantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txteCantidadActionPerformed(evt);
@@ -170,7 +287,7 @@ public class frmMovimiento extends javax.swing.JFrame {
         });
 
         txteFecha.setBackground(new java.awt.Color(204, 204, 204));
-        txteFecha.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Fecha", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        txteFecha.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Fecha", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
         txteFecha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txteFechaActionPerformed(evt);
@@ -178,8 +295,9 @@ public class frmMovimiento extends javax.swing.JFrame {
         });
 
         jScrollPane1.setBackground(new java.awt.Color(204, 204, 204));
-        jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(null, "OBSERVACIONES", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "OBSERVACIONES", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
 
+        txteMovimiento.setEditable(false);
         txteMovimiento.setBackground(new java.awt.Color(204, 204, 204));
         txteMovimiento.setColumns(20);
         txteMovimiento.setRows(5);
@@ -211,7 +329,7 @@ public class frmMovimiento extends javax.swing.JFrame {
         cboOperacion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cboOperacion.setForeground(new java.awt.Color(0, 0, 0));
         cboOperacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECCIONE", "ENTRADA", "SALIDA" }));
-        cboOperacion.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tipo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        cboOperacion.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Tipo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -227,7 +345,7 @@ public class frmMovimiento extends javax.swing.JFrame {
                     .addComponent(txteProducto)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 1, Short.MAX_VALUE))
+                        .addGap(0, 12, Short.MAX_VALUE))
                     .addComponent(cboOperacion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(lblTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -246,14 +364,14 @@ public class frmMovimiento extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addComponent(txteProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cboOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cboOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txteFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txteCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
+                            .addComponent(txteCantidad, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(lblTicket, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -285,14 +403,19 @@ public class frmMovimiento extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnReciboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReciboActionPerformed
-        // TODO add your handling code here:
         int id = guardarMovimiento();
 
         if (id > 0) {
             generarTicket(id);
-            JOptionPane.showMessageDialog(this, "Movimiento registrado correctamente.");
+            JOptionPane.showMessageDialog(this, 
+                "Movimiento registrado correctamente.\nID: " + id, 
+                "Éxito", 
+                JOptionPane.INFORMATION_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, "No se pudo registrar el movimiento.");
+            JOptionPane.showMessageDialog(this, 
+                "No se pudo registrar el movimiento.", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnReciboActionPerformed
 

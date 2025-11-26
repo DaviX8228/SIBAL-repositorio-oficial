@@ -4,17 +4,94 @@
  */
 package frontend;
 
+import java.awt.Color;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import seguridad.Sesion;
+import seguridad.Usuario;
+
 /**
  *
- * @author MISAEL JIMENEZ
+ * @author MISAEL JIMENEZ (Frontend) DAVID VELAZQUEZ (backend)
  */
 public class frmPrincipal extends javax.swing.JFrame {
+
+    private Sesion sesion;
 
     /**
      * Creates new form frmPrincipal
      */
     public frmPrincipal() {
         initComponents();
+        sesion = Sesion.getInstancia();
+        configurarPermisos();
+        cargarInformacionUsuario();
+    }
+
+    // Configurar permisos según el rol del usuario
+    private void configurarPermisos() {
+        if (!sesion.hayUsuarioActivo()) {
+            JOptionPane.showMessageDialog(this,
+                    "No hay sesión activa. Por favor inicie sesión.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+            new frmInicio().setVisible(true);
+            return;
+        }
+
+     
+    }
+
+    // Cargar información del usuario en el panel lateral
+    private void cargarInformacionUsuario() {
+        if (sesion.hayUsuarioActivo()) {
+            Usuario usuario = sesion.getUsuarioActivo();
+
+            // Crear texto con información del usuario
+            StringBuilder info = new StringBuilder();
+            info.append("═══════════════════════\n");
+            info.append("     * S I B A L *     \n");
+            info.append("═══════════════════════\n");
+            info.append("  INFORMACIÓN USUARIO\n");
+            info.append("═══════════════════════\n\n");
+            info.append("Nombre:  ").append(usuario.getNombre()).append("\n\n");
+            info.append("Usuario:  ").append(usuario.getUsuario()).append("\n\n");
+            info.append("Rol:  ").append(usuario.getRol()).append("\n\n");
+            info.append("Estado:  ").append(usuario.isEstado() ? "Activo" : "Inactivo").append("\n");
+            info.append("═══════════════════════\n");
+
+            txtaInformacionU.setText(info.toString());
+            txtaInformacionU.setCaretPosition(0);
+
+            // Opcional: Cargar foto o ícono del usuario en lblUsua
+            // Por ahora puedes poner las iniciales
+            String iniciales = obtenerIniciales(usuario.getNombre());
+            lblUsua.setText("<html><div style='text-align: center; font-size: 24px; font-weight: bold;'>"
+                    + iniciales + "</div></html>");
+            lblUsua.setHorizontalAlignment(SwingConstants.CENTER);
+            lblUsua.setVerticalAlignment(SwingConstants.CENTER);
+            lblUsua.setBackground(new Color(200, 200, 255));
+            lblUsua.setOpaque(true);
+        }
+    }
+
+    // Obtener iniciales del nombre
+    private String obtenerIniciales(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            return "U";
+        }
+
+        String[] partes = nombre.trim().split("\\s+");
+        StringBuilder iniciales = new StringBuilder();
+
+        for (int i = 0; i < Math.min(2, partes.length); i++) {
+            if (!partes[i].isEmpty()) {
+                iniciales.append(partes[i].charAt(0));
+            }
+        }
+
+        return iniciales.toString().toUpperCase();
     }
 
     /**
@@ -31,6 +108,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtaInformacionU = new javax.swing.JTextArea();
+        btnCerrarSesion = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -71,6 +149,15 @@ public class frmPrincipal extends javax.swing.JFrame {
         txtaInformacionU.setRows(5);
         jScrollPane1.setViewportView(txtaInformacionU);
 
+        btnCerrarSesion.setBackground(new java.awt.Color(153, 0, 0));
+        btnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCerrarSesion.setText("CERRAR SESIÓN");
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -84,9 +171,14 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addComponent(lblUsua, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(53, Short.MAX_VALUE)
-                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,8 +186,10 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addGap(8, 8, 8)
                 .addComponent(lblUsua, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnCerrarSesion)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(btnSalir)
                 .addGap(20, 20, 20))
         );
@@ -119,7 +213,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,8 +264,8 @@ public class frmPrincipal extends javax.swing.JFrame {
         getContentPane().add(btnMovimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 330, 80, 80));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel5.setText("MOVIMIENTOS");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 420, -1, -1));
+        jLabel5.setText("REPORTES");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 420, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("USUARIO");
@@ -191,8 +285,15 @@ public class frmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        // TODO add your handling code here:
-        System.exit(0);
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro que desea salir del sistema?",
+                "Confirmar salida",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            sesion.cerrarSesion();
+            System.exit(0);
+        }
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductoActionPerformed
@@ -202,7 +303,17 @@ public class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProductoActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
-        // TODO add your handling code here:
+// Verificar permisos nuevamente (por seguridad)
+        if (!sesion.esAdministrador()) {
+            JOptionPane.showMessageDialog(this,
+                    "Acceso denegado.\nSolo los Administradores pueden gestionar usuarios.",
+                    "Permiso denegado",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        dispose();
+        new frmUsuarios().setVisible(true);
 
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
@@ -215,8 +326,21 @@ public class frmPrincipal extends javax.swing.JFrame {
     private void btnMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimientoActionPerformed
         // TODO add your handling code here:
         dispose();
-        new frmMovimiento().setVisible(true);
+        new frmReportes().setVisible(true);
     }//GEN-LAST:event_btnMovimientoActionPerformed
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Está seguro que desea cerrar sesión?", 
+            "Confirmar", 
+            JOptionPane.YES_NO_OPTION);
+        
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            sesion.cerrarSesion();
+            this.dispose();
+            new frmInicio().setVisible(true);
+        }
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -254,6 +378,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnMovimiento;
     private javax.swing.JButton btnProducto;
     private javax.swing.JButton btnProveedor;

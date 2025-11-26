@@ -3,10 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package frontend;
-
+import backend.ConexionBD;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
- * @author MISAEL JIMENEZ
+ * @author MISAEL JIMENEZ (frontend) y David Velazquez (Backend)
  */
 public class frmProveedor extends javax.swing.JFrame {
 
@@ -15,7 +21,101 @@ public class frmProveedor extends javax.swing.JFrame {
      */
     public frmProveedor() {
         initComponents();
+        cargarProveedores();
+        configurarTabla();
     }
+    
+    // Método para configurar la tabla
+    private void configurarTabla() {
+        tblProveedores.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tblProveedores.getSelectedRow() != -1) {
+                cargarDatosEnFormulario();
+            }
+        });
+    }
+
+    // Método para cargar proveedores en la tabla
+    private void cargarProveedores() {
+        DefaultTableModel modelo = new DefaultTableModel(
+            new String[]{"ID", "Nombre", "Contacto", "Teléfono", "Correo", "Dirección"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        Connection conn = ConexionBD.conectar();
+        if (conn != null) {
+            try {
+                String sql = "SELECT * FROM Proveedores ORDER BY id_proveedor";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();
+                
+                while (rs.next()) {
+                    Object[] fila = {
+                        rs.getInt("id_proveedor"),
+                        rs.getString("nombre"),
+                        rs.getString("contacto"),
+                        rs.getString("telefono"),
+                        rs.getString("correo"),
+                        rs.getString("direccion")
+                    };
+                    modelo.addRow(fila);
+                }
+                
+                tblProveedores.setModel(modelo);
+                rs.close();
+                ps.close();
+                conn.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al cargar proveedores: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    // Método para cargar datos de la tabla al formulario
+    private void cargarDatosEnFormulario() {
+        int fila = tblProveedores.getSelectedRow();
+        if (fila != -1) {
+            txteIdP.setText(tblProveedores.getValueAt(fila, 0).toString());
+            txteNombreP.setText(tblProveedores.getValueAt(fila, 1).toString());
+            txtpContactoP.setText(tblProveedores.getValueAt(fila, 2) != null ? 
+                tblProveedores.getValueAt(fila, 2).toString() : "");
+            txteTelefonoP.setText(tblProveedores.getValueAt(fila, 3) != null ? 
+                tblProveedores.getValueAt(fila, 3).toString() : "");
+            txteCorreroP.setText(tblProveedores.getValueAt(fila, 4) != null ? 
+                tblProveedores.getValueAt(fila, 4).toString() : "");
+            txteDireccionP.setText(tblProveedores.getValueAt(fila, 5) != null ? 
+                tblProveedores.getValueAt(fila, 5).toString() : "");
+        }
+    }
+
+    // Método para limpiar el formulario
+    private void limpiarFormulario() {
+        txteIdP.setText("");
+        txteNombreP.setText("");
+        txtpContactoP.setText("");
+        txteTelefonoP.setText("");
+        txteCorreroP.setText("");
+        txteDireccionP.setText("");
+        tblProveedores.clearSelection();
+    }
+
+    // Método para validar campos obligatorios
+    private boolean validarCampos() {
+        if (txteNombreP.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "El nombre del proveedor es obligatorio", 
+                "Validación", JOptionPane.WARNING_MESSAGE);
+            txteNombreP.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -87,6 +187,12 @@ public class frmProveedor extends javax.swing.JFrame {
 
         txteDireccionP.setBorder(javax.swing.BorderFactory.createTitledBorder("DIRECCION"));
 
+        btnGuardarP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarPActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -114,13 +220,15 @@ public class frmProveedor extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txteIdP, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txteNombreP, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(txteNombreP, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtpContactoP, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txteTelefonoP, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txteTelefonoP, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -130,10 +238,10 @@ public class frmProveedor extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addComponent(btnGuardarP, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 610, 300));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 610, 310));
 
         btnVolver.setBackground(new java.awt.Color(51, 51, 255));
         btnVolver.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -160,6 +268,12 @@ public class frmProveedor extends javax.swing.JFrame {
         jScrollPane3.setViewportView(tblProveedores);
 
         getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 650, 170));
+
+        btnBorrarP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarPActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnBorrarP, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 280, 80, 80));
 
         btnEditarP.addActionListener(new java.awt.event.ActionListener() {
@@ -168,6 +282,12 @@ public class frmProveedor extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnEditarP, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 150, 80, 80));
+
+        btnAgregarP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarPActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnAgregarP, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 410, 80, 80));
 
         pack();
@@ -175,14 +295,155 @@ public class frmProveedor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+       
         dispose();
         new frmPrincipal().setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnEditarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPActionPerformed
-        // TODO add your handling code here:
+        if (txteIdP.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, 
+            "Seleccione un proveedor de la tabla para editar", 
+            "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    if (!validarCampos()) {
+        return;
+    }
+    
+    Connection conn = ConexionBD.conectar();
+    if (conn != null) {
+        try {
+            String sql = "UPDATE Proveedores SET nombre=?, contacto=?, telefono=?, correo=?, direccion=? WHERE id_proveedor=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, txteNombreP.getText().trim());
+            // CORRECCIÓN: usar getPassword() para JPasswordField
+            ps.setString(2, String.valueOf(txtpContactoP.getPassword()).trim());
+            ps.setString(3, String.valueOf(txteTelefonoP.getPassword()).trim());
+            ps.setString(4, txteCorreroP.getText().trim());
+            ps.setString(5, txteDireccionP.getText().trim());
+            ps.setInt(6, Integer.parseInt(txteIdP.getText()));
+            
+            int resultado = ps.executeUpdate();
+            
+            if (resultado > 0) {
+                JOptionPane.showMessageDialog(this, 
+                    "Proveedor actualizado exitosamente", 
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                cargarProveedores();
+                limpiarFormulario();
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "No se pudo actualizar el proveedor", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al actualizar: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     }//GEN-LAST:event_btnEditarPActionPerformed
+
+    private void btnAgregarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarPActionPerformed
+       
+        limpiarFormulario();
+        txteNombreP.requestFocus();
+    }//GEN-LAST:event_btnAgregarPActionPerformed
+
+    private void btnBorrarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarPActionPerformed
+       
+         if (txteIdP.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Seleccione un proveedor de la tabla para eliminar", 
+                "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Está seguro de eliminar el proveedor: " + txteNombreP.getText() + "?", 
+            "Confirmar eliminación", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            Connection conn = ConexionBD.conectar();
+            if (conn != null) {
+                try {
+                    String sql = "DELETE FROM Proveedores WHERE id_proveedor=?";
+                    PreparedStatement ps = conn.prepareStatement(sql);
+                    ps.setInt(1, Integer.parseInt(txteIdP.getText()));
+                    
+                    int resultado = ps.executeUpdate();
+                    
+                    if (resultado > 0) {
+                        JOptionPane.showMessageDialog(this, 
+                            "Proveedor eliminado exitosamente", 
+                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        cargarProveedores();
+                        limpiarFormulario();
+                    } else {
+                        JOptionPane.showMessageDialog(this, 
+                            "No se pudo eliminar el proveedor", 
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                    ps.close();
+                    conn.close();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Error al eliminar: " + e.getMessage() + 
+                        "\n\nNota: Si el proveedor está asociado a productos, no se puede eliminar.", 
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnBorrarPActionPerformed
+
+    private void btnGuardarPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarPActionPerformed
+          if (!validarCampos()) {
+            return;
+        }
+        
+        Connection conn = ConexionBD.conectar();
+        if (conn != null) {
+            try {
+                String sql = "INSERT INTO Proveedores (nombre, contacto, telefono, correo, direccion) VALUES (?, ?, ?, ?, ?)";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, txteNombreP.getText().trim());
+                ps.setString(2, txtpContactoP.getText().trim());
+                ps.setString(3, txteTelefonoP.getText().trim());
+                ps.setString(4, txteCorreroP.getText().trim());
+                ps.setString(5, txteDireccionP.getText().trim());
+                
+                int resultado = ps.executeUpdate();
+                
+                if (resultado > 0) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Proveedor guardado exitosamente", 
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    cargarProveedores();
+                    limpiarFormulario();
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "No se pudo guardar el proveedor", 
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                
+                ps.close();
+                conn.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al guardar: " + e.getMessage(), 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+    }//GEN-LAST:event_btnGuardarPActionPerformed
 
     /**
      * @param args the command line arguments
