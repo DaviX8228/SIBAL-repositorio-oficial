@@ -43,14 +43,86 @@ public class frmTerminos extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                super.paintComponent(g);
+
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    getWidth(), 0, new java.awt.Color(176, 224, 255), // Azul claro
+                    0, 0, new java.awt.Color(245, 250, 255)           // Casi blanco
+                );
+
+                g2.setPaint(gp);
+                g2.fillRect(0, 0, getWidth(), getHeight());
+            }
+        }
+        ;
         jScrollPane1 = new javax.swing.JScrollPane();
         txtaTerminos = new javax.swing.JTextArea();
         chkMantenerS = new javax.swing.JCheckBox();
         jLabel2 = new javax.swing.JLabel();
-        btnContinuar = new javax.swing.JButton();
+        btnContinuar = new javax.swing.JButton() {
+
+            {
+                setContentAreaFilled(false);
+                setFocusPainted(false);
+                setBorderPainted(false);
+                setOpaque(false);
+            }
+
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+                    java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    getWidth(), 0, new java.awt.Color(255, 160, 122), // Naranja claro rojizo (derecha)
+                    0, 0, new java.awt.Color(220, 60, 40)             // Rojo-naranja más fuerte (izquierda)
+                );
+
+                g2.setPaint(gp);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+
+                super.paintComponent(g);
+            }
+        }
+        ;
         jLabel3 = new javax.swing.JLabel();
-        btnRegresar = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton() {
+
+            {
+                setContentAreaFilled(false);
+                setFocusPainted(false);
+                setBorderPainted(false);
+                setOpaque(false);
+            }
+
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+                    java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    0, 0, new java.awt.Color(0, 120, 200),      // Azul medio
+                    getWidth(), 0, new java.awt.Color(185, 225, 255) // Azul claro
+                );
+
+                g2.setPaint(gp);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+
+                super.paintComponent(g);
+            }
+        }
+        ;
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -63,7 +135,7 @@ public class frmTerminos extends javax.swing.JFrame {
         txtaTerminos.setText("1. Aceptación de los Términos Al utilizar el Sistema de Inventario para Bodegas y Almacenes (SIBAL), \ndesarrollado por el equipo académico compuesto por David Velazquez, Misael Jiménez, Alexander Soláres y Víctor Gonzáles, usted acepta \nestar sujeto a estos Términos y Condiciones. Si no está de acuerdo con alguna parte de estos términos, \nno deberá utilizar el sistema. \n\n2. Descripción del Servicio SIBAL: Es una aplicación de escritorio desarrollada en Java con la arquitectura\nModelo-Vista-Controlador (MVC), diseñada para la gestión de inventarios en bodegas y \nalmacenes. Incluye funcionalidades como registro de usuarios, proveedores, productos, categorías, \nmovimientos de inventario y generación de reportes. Este software se ejecuta en un entorno local con \nbase de datos MySQL y fue creado como parte de un proyecto académico en Apache NetBeans. \n\n3. Licencia de Uso  SIBAL: se proporciona bajo una licencia de uso no comercial, exclusiva para fines \neducativos y de aprendizaje. El software no puede ser distribuido, vendido, modificado o utilizado con \nfines comerciales sin el consentimiento expreso del equipo desarrollador. Los usuarios tienen derecho \na utilizar el sistema únicamente en el contexto del proyecto académico para el cual fue desarrollado.  \n\n4. Registro y Seguridad:  El acceso al sistema requiere un registro de usuario con un nombre de usuario\ny contraseña, los cuales deben ser únicos y seguros. Los usuarios son responsables de mantener la \nconfidencialidad de sus credenciales. Cualquier actividad realizada bajo su cuenta será de su exclusiva \nresponsabilidad. La contraseña se almacena en la base de datos utilizando encriptación (SHA-256) para \ngarantizar la seguridad de los datos.  \n\n5. Responsabilidades del Usuario:  Los usuarios deben utilizar SIBAL de manera ética y conforme a las \nleyes aplicables, evitando el acceso no autorizado o la manipulación de datos. \nEstá prohibido introducir datos falsos, maliciosos o que puedan afectar el funcionamiento del sistema. \nEl equipo desarrollador no se hace responsable por pérdidas de datos derivadas de un uso indebido o \nfalta de respaldo por parte del usuario.  \n\n6. Propiedad Intelectual:  Todos los derechos de propiedad intelectual de SIBAL, incluyendo el código \nfuente, diseño de la interfaz, logo y documentación, pertenecen al equipo desarrollador \n(David, Misael, Alexander, Víctor). Cualquier reproducción, distribución o uso del software o sus \ncomponentes requiere autorización previa.  \n\n7. Limitación de Responsabilidad: SIBAL se proporciona \"tal cual\", sin garantías de ningún tipo, ya sea \nexpresa o implícita, incluyendo, pero no limitándose a, garantías de comerciabilidad o idoneidad para\nun propósito particular. El equipo desarrollador no será responsable por daños directos, indirectos,\nincidentales o consecuentes derivados del uso o incapacidad de usar el sistema.  \n\n8. Modificaciones y Actualizaciones: El equipo desarrollador se reserva el derecho de modificar, \nsuspender o discontinuar SIBAL en cualquier momento sin previo aviso, especialmente en el contexto \ndel desarrollo académico. \nLos usuarios serán notificados de cambios significativos a través de los canales establecidos \n(ej. documentación en el repositorio GitHub).  \n\n9. Privacidad de Datos: Los datos ingresados en SIBAL (usuarios, proveedores, productos, movimientos)\nse almacenan localmente en una base de datos MySQL gestionada por el usuario. \nEl equipo desarrollador no recopila ni almacena datos de los usuarios fuera del entorno local, salvo \nque se especifique lo contrario para fines académicos con consentimiento expreso. Los usuarios son \nresponsables de cumplir con las normativas de protección de datos aplicables en su jurisdicción.  \n\n10. Resolución de Conflictos: Cualquier disputa relacionada con el uso de SIBAL se resolverá de manera\namistosa entre las partes involucradas. En caso de no llegar a un acuerdo, se someterá a las leyes donde\nse desarrolla el proyecto (Cecyt 8) .  \n11. Contacto: Para preguntas, sugerencias o reportes relacionados con SIBAL, los usuarios pueden \ncontactar al equipo desarrollador a través de los canales establecidos en la documentación del \nproyecto (ej. correo electrónico o repositorio GitHub). \n\n\nFecha de entrada en vigor: [08 de Noviembre de 2025].");
         jScrollPane1.setViewportView(txtaTerminos);
 
-        chkMantenerS.setText("Aceptar terminos y condiciones");
+        chkMantenerS.setText("He leído y acepto los Términos y Condiciones del Sistema SIBAL");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setText("TERMINOS Y CONDICIONES");
@@ -85,32 +157,39 @@ public class frmTerminos extends javax.swing.JFrame {
             }
         });
 
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jTextArea2.setText("Al utilizar el Sistema SIBAL, usted reconoce que ha leído, comprendido y aceptado \nestos términos y condiciones en su totalidad. Si no está de acuerdo con alguno de \nestos términos, no debe utilizar el sistema.");
+        jScrollPane2.setViewportView(jTextArea2);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 558, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(204, 204, 204)
-                        .addComponent(chkMantenerS))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(141, 141, 141)
                         .addComponent(jLabel2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(236, 236, 236)
-                        .addComponent(jLabel3)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(88, 88, 88)
-                .addComponent(btnRegresar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnContinuar)
-                .addGap(89, 89, 89))
+                        .addComponent(jLabel3))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 558, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(21, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnRegresar)
+                        .addGap(177, 177, 177)
+                        .addComponent(btnContinuar))
+                    .addComponent(chkMantenerS))
+                .addGap(115, 115, 115))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,18 +198,20 @@ public class frmTerminos extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(chkMantenerS)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnContinuar)
-                    .addComponent(btnRegresar))
-                .addContainerGap())
+                    .addComponent(btnRegresar)
+                    .addComponent(btnContinuar))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 530));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 660));
 
         pack();
         setLocationRelativeTo(null);
@@ -314,6 +395,8 @@ public class frmTerminos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea txtaTerminos;
     // End of variables declaration//GEN-END:variables
 }

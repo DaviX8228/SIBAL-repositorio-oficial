@@ -23,7 +23,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,-127,0,0,4,-93"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,-127,0,0,4,-73"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
@@ -36,19 +36,22 @@
           <Color blue="66" green="66" red="66" type="rgb"/>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel() {&#xd;&#xa;    @Override&#xd;&#xa;    protected void paintComponent(java.awt.Graphics g) {&#xd;&#xa;        super.paintComponent(g);&#xd;&#xa;&#xd;&#xa;        java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;&#xd;&#xa;&#xd;&#xa;        java.awt.GradientPaint gp = new java.awt.GradientPaint(&#xd;&#xa;            getWidth(), 0, new java.awt.Color(176, 224, 255), // Azul claro&#xd;&#xa;            0, 0, new java.awt.Color(245, 250, 255)           // Casi blanco&#xd;&#xa;        );&#xd;&#xa;&#xd;&#xa;        g2.setPaint(gp);&#xd;&#xa;        g2.fillRect(0, 0, getWidth(), getHeight());&#xd;&#xa;    }&#xd;&#xa;}&#xd;&#xa;"/>
+      </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="0" y="0" width="1190" height="70"/>
+          <AbsoluteConstraints x="0" y="0" width="1210" height="70"/>
         </Constraint>
       </Constraints>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="475" max="-2" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace pref="524" max="32767" attributes="0"/>
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="482" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="450" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -84,6 +87,9 @@
           </Border>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel() {&#xd;&#xa;    @Override&#xd;&#xa;    protected void paintComponent(java.awt.Graphics g) {&#xd;&#xa;        super.paintComponent(g);&#xd;&#xa;&#xd;&#xa;        java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;&#xd;&#xa;&#xd;&#xa;        java.awt.GradientPaint gp = new java.awt.GradientPaint(&#xd;&#xa;            0, 0, new java.awt.Color(200, 200, 200),  // Gris suave (arriba)&#xd;&#xa;            0, getHeight(), new java.awt.Color(240, 240, 240) // Gris m&#xe1;s claro (abajo)&#xd;&#xa;        );&#xd;&#xa;&#xd;&#xa;        g2.setPaint(gp);&#xd;&#xa;        g2.fillRect(0, 0, getWidth(), getHeight());&#xd;&#xa;    }&#xd;&#xa;}&#xd;&#xa;"/>
+      </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="10" y="80" width="800" height="260"/>
@@ -94,19 +100,19 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="jScrollPane2" min="-2" pref="600" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnBuscarPR" min="-2" pref="65" max="-2" attributes="0"/>
-                      <Component id="btnAgregarPR" min="-2" pref="65" max="-2" attributes="0"/>
-                  </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnEditarPR" min="-2" pref="65" max="-2" attributes="0"/>
-                      <Component id="btnEliminarPR" min="-2" pref="65" max="-2" attributes="0"/>
+                      <Component id="btnBuscarPR" min="-2" pref="80" max="-2" attributes="0"/>
+                      <Component id="btnAgregarPR" min="-2" pref="80" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="17" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="btnEditarPR" min="-2" pref="80" max="-2" attributes="0"/>
+                      <Component id="btnEliminarPR" min="-2" pref="80" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -117,15 +123,15 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jScrollPane2" min="-2" pref="208" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="btnAgregarPR" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
-                              <Component id="btnEditarPR" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="btnAgregarPR" min="-2" pref="80" max="-2" attributes="0"/>
+                              <Component id="btnEditarPR" min="-2" pref="80" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="btnEliminarPR" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
-                              <Component id="btnBuscarPR" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="btnBuscarPR" min="-2" pref="80" max="-2" attributes="0"/>
+                              <Component id="btnEliminarPR" min="-2" pref="80" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -158,7 +164,9 @@
         </Container>
         <Component class="javax.swing.JButton" name="btnAgregarPR">
           <Properties>
-            <Property name="text" type="java.lang.String" value="agregar"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/imagenes/btnagregarp.png"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAgregarPRActionPerformed"/>
@@ -166,7 +174,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnBuscarPR">
           <Properties>
-            <Property name="text" type="java.lang.String" value="buscar"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/imagenes/btnBuscar.png"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarPRActionPerformed"/>
@@ -174,7 +184,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnEditarPR">
           <Properties>
-            <Property name="text" type="java.lang.String" value="editar"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/imagenes/btneditar.png"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditarPRActionPerformed"/>
@@ -182,7 +194,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnEliminarPR">
           <Properties>
-            <Property name="text" type="java.lang.String" value="eliminar"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/imagenes/btnborrar.png"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarPRActionPerformed"/>
@@ -198,6 +212,9 @@
           </Border>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel() {&#xd;&#xa;    @Override&#xd;&#xa;    protected void paintComponent(java.awt.Graphics g) {&#xd;&#xa;        super.paintComponent(g);&#xd;&#xa;&#xd;&#xa;        java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;&#xd;&#xa;&#xd;&#xa;        java.awt.GradientPaint gp = new java.awt.GradientPaint(&#xd;&#xa;            0, 0, new java.awt.Color(200, 200, 200),  // Gris suave (arriba)&#xd;&#xa;            0, getHeight(), new java.awt.Color(240, 240, 240) // Gris m&#xe1;s claro (abajo)&#xd;&#xa;        );&#xd;&#xa;&#xd;&#xa;        g2.setPaint(gp);&#xd;&#xa;        g2.fillRect(0, 0, getWidth(), getHeight());&#xd;&#xa;    }&#xd;&#xa;}&#xd;&#xa;"/>
+      </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="10" y="360" width="540" height="240"/>
@@ -361,6 +378,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelarActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JButton() {&#xd;&#xa;&#xd;&#xa;    {&#xd;&#xa;        setContentAreaFilled(false);&#xd;&#xa;        setFocusPainted(false);&#xd;&#xa;        setBorderPainted(false);&#xd;&#xa;        setOpaque(false);&#xd;&#xa;    }&#xd;&#xa;&#xd;&#xa;    @Override&#xd;&#xa;    protected void paintComponent(java.awt.Graphics g) {&#xd;&#xa;        java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;&#xd;&#xa;&#xd;&#xa;        g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,&#xd;&#xa;                            java.awt.RenderingHints.VALUE_ANTIALIAS_ON);&#xd;&#xa;&#xd;&#xa;        java.awt.GradientPaint gp = new java.awt.GradientPaint(&#xd;&#xa;            0, 0, new java.awt.Color(200, 0, 0),      // Rojo fuerte&#xd;&#xa;            getWidth(), 0, new java.awt.Color(255, 120, 120) // Rojo claro&#xd;&#xa;        );&#xd;&#xa;&#xd;&#xa;        g2.setPaint(gp);&#xd;&#xa;        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);&#xd;&#xa;&#xd;&#xa;        super.paintComponent(g);&#xd;&#xa;    }&#xd;&#xa;}&#xd;&#xa;"/>
+      </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="600" y="470" width="180" height="-1"/>
@@ -383,6 +403,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVolverActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JButton() {&#xd;&#xa;&#xd;&#xa;    {&#xd;&#xa;        setContentAreaFilled(false);&#xd;&#xa;        setFocusPainted(false);&#xd;&#xa;        setBorderPainted(false);&#xd;&#xa;        setOpaque(false);&#xd;&#xa;    }&#xd;&#xa;&#xd;&#xa;    @Override&#xd;&#xa;    protected void paintComponent(java.awt.Graphics g) {&#xd;&#xa;        java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;&#xd;&#xa;&#xd;&#xa;        g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,&#xd;&#xa;                            java.awt.RenderingHints.VALUE_ANTIALIAS_ON);&#xd;&#xa;&#xd;&#xa;        java.awt.GradientPaint gp = new java.awt.GradientPaint(&#xd;&#xa;            getWidth(), 0, new java.awt.Color(255, 160, 122), // Naranja claro rojizo (derecha)&#xd;&#xa;            0, 0, new java.awt.Color(220, 60, 40)             // Rojo-naranja m&#xe1;s fuerte (izquierda)&#xd;&#xa;        );&#xd;&#xa;&#xd;&#xa;        g2.setPaint(gp);&#xd;&#xa;        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);&#xd;&#xa;&#xd;&#xa;        super.paintComponent(g);&#xd;&#xa;    }&#xd;&#xa;}&#xd;&#xa;"/>
+      </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="600" y="540" width="180" height="-1"/>
@@ -405,6 +428,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCotizacionActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JButton() {&#xd;&#xa;&#xd;&#xa;    {&#xd;&#xa;        setContentAreaFilled(false);&#xd;&#xa;        setFocusPainted(false);&#xd;&#xa;        setBorderPainted(false);&#xd;&#xa;        setOpaque(false);&#xd;&#xa;    }&#xd;&#xa;&#xd;&#xa;    @Override&#xd;&#xa;    protected void paintComponent(java.awt.Graphics g) {&#xd;&#xa;        java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;&#xd;&#xa;&#xd;&#xa;        g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,&#xd;&#xa;                            java.awt.RenderingHints.VALUE_ANTIALIAS_ON);&#xd;&#xa;&#xd;&#xa;        java.awt.GradientPaint gp = new java.awt.GradientPaint(&#xd;&#xa;            0, 0, new java.awt.Color(120, 72, 30),    // Caf&#xe9; oscuro&#xd;&#xa;            getWidth(), 0, new java.awt.Color(200, 150, 100) // Caf&#xe9; claro&#xd;&#xa;        );&#xd;&#xa;&#xd;&#xa;        g2.setPaint(gp);&#xd;&#xa;        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);&#xd;&#xa;&#xd;&#xa;        super.paintComponent(g);&#xd;&#xa;    }&#xd;&#xa;}&#xd;&#xa;"/>
+      </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="600" y="400" width="180" height="-1"/>
@@ -419,6 +445,9 @@
           </Border>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel() {&#xd;&#xa;    @Override&#xd;&#xa;    protected void paintComponent(java.awt.Graphics g) {&#xd;&#xa;        super.paintComponent(g);&#xd;&#xa;&#xd;&#xa;        java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;&#xd;&#xa;&#xd;&#xa;        java.awt.GradientPaint gp = new java.awt.GradientPaint(&#xd;&#xa;            0, 0, new java.awt.Color(200, 200, 200),  // Gris suave (arriba)&#xd;&#xa;            0, getHeight(), new java.awt.Color(240, 240, 240) // Gris m&#xe1;s claro (abajo)&#xd;&#xa;        );&#xd;&#xa;&#xd;&#xa;        g2.setPaint(gp);&#xd;&#xa;        g2.fillRect(0, 0, getWidth(), getHeight());&#xd;&#xa;    }&#xd;&#xa;}&#xd;&#xa;"/>
+      </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="820" y="80" width="360" height="520"/>

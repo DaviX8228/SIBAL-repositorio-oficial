@@ -126,7 +126,23 @@ public class frmProveedor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                super.paintComponent(g);
+
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    getWidth(), 0, new java.awt.Color(176, 224, 255), // Azul claro
+                    0, 0, new java.awt.Color(245, 250, 255)           // Casi blanco
+                );
+
+                g2.setPaint(gp);
+                g2.fillRect(0, 0, getWidth(), getHeight());
+            }
+        }
+        ;
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         txteIdP = new javax.swing.JTextField();
@@ -136,12 +152,40 @@ public class frmProveedor extends javax.swing.JFrame {
         txteTelefonoP = new javax.swing.JPasswordField();
         txteDireccionP = new javax.swing.JTextField();
         btnGuardarP = new javax.swing.JButton();
-        btnVolver = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton() {
+
+            {
+                setContentAreaFilled(false);
+                setFocusPainted(false);
+                setBorderPainted(false);
+                setOpaque(false);
+            }
+
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+                    java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    0, 0, new java.awt.Color(200, 0, 0),      // Rojo fuerte
+                    getWidth(), 0, new java.awt.Color(255, 120, 120) // Rojo claro
+                );
+
+                g2.setPaint(gp);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+
+                super.paintComponent(g);
+            }
+        }
+        ;
         jScrollPane3 = new javax.swing.JScrollPane();
         tblProveedores = new javax.swing.JTable();
         btnBorrarP = new javax.swing.JButton();
         btnEditarP = new javax.swing.JButton();
         btnAgregarP = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -187,6 +231,7 @@ public class frmProveedor extends javax.swing.JFrame {
 
         txteDireccionP.setBorder(javax.swing.BorderFactory.createTitledBorder("DIRECCION"));
 
+        btnGuardarP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnguardar.png"))); // NOI18N
         btnGuardarP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarPActionPerformed(evt);
@@ -238,7 +283,7 @@ public class frmProveedor extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addComponent(btnGuardarP, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 610, 310));
@@ -252,7 +297,7 @@ public class frmProveedor extends javax.swing.JFrame {
                 btnVolverActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 580, -1, -1));
+        getContentPane().add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 520, -1, -1));
 
         tblProveedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -269,6 +314,7 @@ public class frmProveedor extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 650, 170));
 
+        btnBorrarP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnborrar.png"))); // NOI18N
         btnBorrarP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarPActionPerformed(evt);
@@ -276,6 +322,7 @@ public class frmProveedor extends javax.swing.JFrame {
         });
         getContentPane().add(btnBorrarP, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 280, 80, 80));
 
+        btnEditarP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btneditar.png"))); // NOI18N
         btnEditarP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarPActionPerformed(evt);
@@ -283,12 +330,14 @@ public class frmProveedor extends javax.swing.JFrame {
         });
         getContentPane().add(btnEditarP, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 150, 80, 80));
 
+        btnAgregarP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnagregar.png"))); // NOI18N
         btnAgregarP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarPActionPerformed(evt);
             }
         });
         getContentPane().add(btnAgregarP, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 410, 80, 80));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 820, 530));
 
         pack();
         setLocationRelativeTo(null);
@@ -486,6 +535,7 @@ public class frmProveedor extends javax.swing.JFrame {
     private javax.swing.JButton btnEditarP;
     private javax.swing.JButton btnGuardarP;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

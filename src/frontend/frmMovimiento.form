@@ -33,6 +33,9 @@
           <Color blue="99" green="99" red="99" type="rgb"/>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel() {&#xd;&#xa;    @Override&#xd;&#xa;    protected void paintComponent(java.awt.Graphics g) {&#xd;&#xa;        super.paintComponent(g);&#xd;&#xa;&#xd;&#xa;        java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;&#xd;&#xa;&#xd;&#xa;        java.awt.GradientPaint gp = new java.awt.GradientPaint(&#xd;&#xa;            getWidth(), 0, new java.awt.Color(176, 224, 255), // Azul claro&#xd;&#xa;            0, 0, new java.awt.Color(245, 250, 255)           // Casi blanco&#xd;&#xa;        );&#xd;&#xa;&#xd;&#xa;        g2.setPaint(gp);&#xd;&#xa;        g2.fillRect(0, 0, getWidth(), getHeight());&#xd;&#xa;    }&#xd;&#xa;}&#xd;&#xa;"/>
+      </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="0" y="0" width="550" height="-1"/>
@@ -244,6 +247,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVolverActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JButton() {&#xd;&#xa;&#xd;&#xa;    {&#xd;&#xa;        setContentAreaFilled(false);&#xd;&#xa;        setFocusPainted(false);&#xd;&#xa;        setBorderPainted(false);&#xd;&#xa;        setOpaque(false);&#xd;&#xa;    }&#xd;&#xa;&#xd;&#xa;    @Override&#xd;&#xa;    protected void paintComponent(java.awt.Graphics g) {&#xd;&#xa;        java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;&#xd;&#xa;&#xd;&#xa;        g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,&#xd;&#xa;                            java.awt.RenderingHints.VALUE_ANTIALIAS_ON);&#xd;&#xa;&#xd;&#xa;        java.awt.GradientPaint gp = new java.awt.GradientPaint(&#xd;&#xa;            0, 0, new java.awt.Color(200, 0, 0),      // Rojo fuerte&#xd;&#xa;            getWidth(), 0, new java.awt.Color(255, 120, 120) // Rojo claro&#xd;&#xa;        );&#xd;&#xa;&#xd;&#xa;        g2.setPaint(gp);&#xd;&#xa;        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);&#xd;&#xa;&#xd;&#xa;        super.paintComponent(g);&#xd;&#xa;    }&#xd;&#xa;}&#xd;&#xa;"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="lblTicket">
           <Properties>
@@ -270,6 +276,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReciboActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JButton() {&#xd;&#xa;&#xd;&#xa;    {&#xd;&#xa;        setContentAreaFilled(false);&#xd;&#xa;        setFocusPainted(false);&#xd;&#xa;        setBorderPainted(false);&#xd;&#xa;        setOpaque(false);&#xd;&#xa;    }&#xd;&#xa;&#xd;&#xa;    @Override&#xd;&#xa;    protected void paintComponent(java.awt.Graphics g) {&#xd;&#xa;        java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;&#xd;&#xa;&#xd;&#xa;        g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,&#xd;&#xa;                            java.awt.RenderingHints.VALUE_ANTIALIAS_ON);&#xd;&#xa;&#xd;&#xa;        java.awt.GradientPaint gp = new java.awt.GradientPaint(&#xd;&#xa;            getWidth(), 0, new java.awt.Color(255, 160, 122), // Naranja claro rojizo (derecha)&#xd;&#xa;            0, 0, new java.awt.Color(220, 60, 40)             // Rojo-naranja m&#xe1;s fuerte (izquierda)&#xd;&#xa;        );&#xd;&#xa;&#xd;&#xa;        g2.setPaint(gp);&#xd;&#xa;        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);&#xd;&#xa;&#xd;&#xa;        super.paintComponent(g);&#xd;&#xa;    }&#xd;&#xa;}&#xd;&#xa;"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JComboBox" name="cboOperacion">
           <Properties>
