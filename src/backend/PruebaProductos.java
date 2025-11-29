@@ -13,11 +13,12 @@ package backend;
 public class PruebaProductos {
     public static void main(String[] args) {
         // Agregar producto
-        ControlProductos.agregarProducto("Cinta métrica", "5 metros, acero inoxidable", 25, 75.50, 3, 2);
+       // ControlProductos.agregarProducto("Cinta métrica", "5 metros, acero inoxidable", 25, 75.50, 3, 2);
 
         // Mostrar productos
-        for (String p : ControlProductos.obtenerProductos()) {
-            System.out.println(p);
-        }
+        //for (String p : ControlProductos.obtenerProductos()) {
+        //    System.out.println(p);
+        //}
+        //Ya no se necesita
     }
 }

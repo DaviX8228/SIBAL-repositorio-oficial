@@ -33,7 +33,7 @@ public class frmReportes extends javax.swing.JFrame {
                      "LEFT JOIN categorias c ON p.id_categoria = c.id_categoria " +
                      "LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor";
 
-        try (Connection con = ConexionBD.getConexion();
+        try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -64,7 +64,7 @@ public class frmReportes extends javax.swing.JFrame {
 
         String sql = "SELECT COUNT(*) AS total FROM productos WHERE stock < 10";
 
-        try (Connection con = ConexionBD.getConexion();
+        try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -82,7 +82,7 @@ public class frmReportes extends javax.swing.JFrame {
     private void cargarProductosBajos() {
         String sql = "SELECT id_producto, nombre, stock FROM productos WHERE stock < 10";
 
-        try (Connection con = ConexionBD.getConexion();
+        try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -114,7 +114,7 @@ public class frmReportes extends javax.swing.JFrame {
                      "INNER JOIN usuarios u ON m.id_usuario = u.id_usuario " +
                      "WHERE m.tipo_movimiento = 'Entrada' AND DATE(m.fecha) = CURRENT_DATE";
 
-        try (Connection con = ConexionBD.getConexion();
+        try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -147,7 +147,7 @@ public class frmReportes extends javax.swing.JFrame {
                      "INNER JOIN usuarios u ON m.id_usuario = u.id_usuario " +
                      "WHERE m.tipo_movimiento = 'Salida' AND DATE(m.fecha) = CURRENT_DATE";
 
-        try (Connection con = ConexionBD.getConexion();
+        try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -196,7 +196,23 @@ public class frmReportes extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                super.paintComponent(g);
+
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    getWidth(), 0, new java.awt.Color(176, 224, 255), // Azul claro
+                    0, 0, new java.awt.Color(245, 250, 255)           // Casi blanco
+                );
+
+                g2.setPaint(gp);
+                g2.fillRect(0, 0, getWidth(), getHeight());
+            }
+        }
+        ;
         jLabel1 = new javax.swing.JLabel();
         panTReportes = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -212,6 +228,8 @@ public class frmReportes extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
@@ -281,7 +299,7 @@ public class frmReportes extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(chboxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGenerar))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(panTReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 630, 50));
@@ -345,27 +363,29 @@ public class frmReportes extends javax.swing.JFrame {
 
         getContentPane().add(panAlerta, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, 630, 70));
 
+        btnExportar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnPdf.jpg"))); // NOI18N
         btnExportar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnExportar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 490, 100, 70));
+        getContentPane().add(btnExportar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 480, 80, 80));
 
+        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnVolver.jpg"))); // NOI18N
         btnCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCerrarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 490, 90, 70));
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 480, 80, 70));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("GENERAR PDF");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 570, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel4.setText("CERRAR");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 570, -1, -1));
+        jLabel4.setText("VOLVER");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 560, -1, -1));
 
         pack();
         setLocationRelativeTo(null);

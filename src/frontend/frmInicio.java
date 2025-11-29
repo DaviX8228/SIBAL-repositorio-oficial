@@ -14,7 +14,7 @@ import seguridad.ValidarAcceso;
 
 /**
  *
- * @author MISAEL JIMENEZ
+ * @author MISAEL JIMENEZ (frontend) DAVID VELAZQUEZ (backend y seguridad)
  */
 public class frmInicio extends javax.swing.JFrame {
 
@@ -34,34 +34,98 @@ public class frmInicio extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                super.paintComponent(g);
+
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                g2.setRenderingHint(
+                    java.awt.RenderingHints.KEY_ANTIALIASING,
+                    java.awt.RenderingHints.VALUE_ANTIALIAS_ON
+                );
+
+                // Degradado gris suave (oscuro → claro)
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    0, 0, new java.awt.Color(180, 180, 180),   // gris medio (arriba)
+                    0, getHeight(), new java.awt.Color(210, 210, 210)  // gris claro (abajo)
+                );
+
+                g2.setPaint(gp);
+                g2.fillRect(0, 0, getWidth(), getHeight());
+            }
+        }
+        ;
+        btnIniciarS = new javax.swing.JButton() {
+
+            {
+                setContentAreaFilled(false);
+                setFocusPainted(false);
+                setBorderPainted(false);
+                setOpaque(false);
+            }
+
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+                    java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    0, 0, new java.awt.Color(70, 130, 255),      // Azul suave
+                    getWidth(), 0, new java.awt.Color(180, 150, 255) // Moradito sutil
+                );
+
+                g2.setPaint(gp);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+
+                super.paintComponent(g);
+            }
+        }
+        ;
+        jLabel2 = new javax.swing.JLabel();
+        btnRegistrar = new javax.swing.JButton() {
+
+            {
+                setContentAreaFilled(false);
+                setFocusPainted(false);
+                setBorderPainted(false);
+                setOpaque(false);
+            }
+
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+                    java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    0, 0, new java.awt.Color(180, 180, 180),  // Gris superior
+                    0, getHeight(), new java.awt.Color(255, 255, 255) // Blanco inferior
+                );
+
+                g2.setPaint(gp);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+
+                super.paintComponent(g);
+            }
+        }
+        ;
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jPanel1 = new javax.swing.JPanel();
-        btnIniciarS = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        btnRegistrar = new javax.swing.JButton();
-        lblFondoI = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(102, 0, 0));
-        jLabel1.setText("Bienvenid@ al Sistema SIBAL");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 25, -1, -1));
-
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("\nGestiona fácilmente el inventario, registra movimientos de entrada y salida.\n    Controla proveedores y administra usuarios, todo desde un solo lugar.");
-        jScrollPane1.setViewportView(jTextArea1);
-
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 70, 425, -1));
-
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.setOpaque(false);
 
         btnIniciarS.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnIniciarS.setText("INICIA SESION");
@@ -82,138 +146,77 @@ public class frmInicio extends javax.swing.JFrame {
             }
         });
 
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Gestiona fácilmente el inventario, registra movimientos\nde entrada y salida. Controla proveedores y administra\nusuarios, todo desde un solo lugar");
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
+        jLabel1.setText("SISTEMA SIBAL");
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lblFondo1.png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(101, 101, 101))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(160, 160, 160))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
+                        .addGap(30, 30, 30)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(177, 177, 177)
                         .addComponent(jLabel2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnIniciarS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(13, Short.MAX_VALUE))
+                        .addGap(123, 123, 123)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnIniciarS))))
+                .addGap(0, 46, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(btnIniciarS)
-                .addGap(12, 12, 12)
-                .addComponent(jLabel2)
+                .addGap(33, 33, 33)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
                 .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(btnIniciarS)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnRegistrar)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(161, 174, -1, -1));
-        getContentPane().add(lblFondoI, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 340));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-3, -7, 400, 470));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-         // Crear panel personalizado para registro
-    JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
+         
+
+    frmTerminos ventanaTerminos = new frmTerminos(this);
+    ventanaTerminos.setVisible(true);
     
-    JTextField txtNombre = new JTextField(15);
-    JTextField txtUsuario = new JTextField(15);
-    JPasswordField txtPassword = new JPasswordField(15);
-    JPasswordField txtConfirmPassword = new JPasswordField(15);
-    
-    // ComboBox para el rol
-    String[] roles = {"Encargado", "Administrador"};
-    JComboBox<String> cmbRol = new JComboBox<>(roles);
-    
-    panel.add(new JLabel("Nombre completo:"));
-    panel.add(txtNombre);
-    panel.add(new JLabel("Usuario:"));
-    panel.add(txtUsuario);
-    panel.add(new JLabel("Contraseña:"));
-    panel.add(txtPassword);
-    panel.add(new JLabel("Confirmar contraseña:"));
-    panel.add(txtConfirmPassword);
-    panel.add(new JLabel("Rol:"));
-    panel.add(cmbRol);
-    
-    int resultado = JOptionPane.showConfirmDialog(
-        this, 
-        panel, 
-        "Crear Cuenta - SIBAL", 
-        JOptionPane.OK_CANCEL_OPTION, 
-        JOptionPane.PLAIN_MESSAGE
-    );
-    
-    if (resultado == JOptionPane.OK_OPTION) {
-        String nombre = txtNombre.getText().trim();
-        String usuario = txtUsuario.getText().trim();
-        String password = new String(txtPassword.getPassword());
-        String confirmPassword = new String(txtConfirmPassword.getPassword());
-        String rol = (String) cmbRol.getSelectedItem();
-        
-        // Validaciones
-        if (nombre.isEmpty() || usuario.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(
-                this, 
-                "Todos los campos son obligatorios", 
-                "Campos vacíos", 
-                JOptionPane.WARNING_MESSAGE
-            );
-            return;
-        }
-        
-        if (password.length() < 4) {
-            JOptionPane.showMessageDialog(
-                this, 
-                "La contraseña debe tener al menos 4 caracteres", 
-                "Contraseña débil", 
-                JOptionPane.WARNING_MESSAGE
-            );
-            return;
-        }
-        
-        if (!password.equals(confirmPassword)) {
-            JOptionPane.showMessageDialog(
-                this, 
-                "Las contraseñas no coinciden", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE
-            );
-            return;
-        }
-        
-        // Crear objeto Usuario
-        Usuario nuevoUsuario = new Usuario(nombre, usuario, password, rol);
-        
-        // Registrar en BD
-        ControlRegistro controlRegistro = new ControlRegistro();
-        boolean registrado = controlRegistro.registrarUsuario(nuevoUsuario);
-        
-        if (registrado) {
-            JOptionPane.showMessageDialog(
-                this, 
-                "¡Cuenta creada exitosamente!\n" +
-                "Usuario: " + usuario + "\n" +
-                "Rol: " + rol + "\n\n" +
-                "Ya puedes iniciar sesión", 
-                "Registro exitoso", 
-                JOptionPane.INFORMATION_MESSAGE
-            );
-        } else {
-            JOptionPane.showMessageDialog(
-                this, 
-                "No se pudo crear la cuenta.\n" +
-                "El usuario podría ya existir.", 
-                "Error de registro", 
-                JOptionPane.ERROR_MESSAGE
-            );
-        }
-    }
+    // Entoncees pues el registro comenzará en frmTerminos si es que el usaurio acepta
+
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnIniciarSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSActionPerformed
@@ -322,9 +325,9 @@ public class frmInicio extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JLabel lblFondoI;
     // End of variables declaration//GEN-END:variables
 }

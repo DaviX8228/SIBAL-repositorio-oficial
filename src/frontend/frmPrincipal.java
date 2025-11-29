@@ -4,17 +4,94 @@
  */
 package frontend;
 
+import java.awt.Color;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import seguridad.Sesion;
+import seguridad.Usuario;
+
 /**
  *
- * @author MISAEL JIMENEZ
+ * @author MISAEL JIMENEZ (Frontend) DAVID VELAZQUEZ (backend)
  */
 public class frmPrincipal extends javax.swing.JFrame {
+
+    private Sesion sesion;
 
     /**
      * Creates new form frmPrincipal
      */
     public frmPrincipal() {
         initComponents();
+        sesion = Sesion.getInstancia();
+        configurarPermisos();
+        cargarInformacionUsuario();
+    }
+
+    // Configurar permisos según el rol del usuario
+    private void configurarPermisos() {
+        if (!sesion.hayUsuarioActivo()) {
+            JOptionPane.showMessageDialog(this,
+                    "No hay sesión activa. Por favor inicie sesión.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+            new frmInicio().setVisible(true);
+            return;
+        }
+
+     
+    }
+
+    // Cargar información del usuario en el panel lateral
+    private void cargarInformacionUsuario() {
+        if (sesion.hayUsuarioActivo()) {
+            Usuario usuario = sesion.getUsuarioActivo();
+
+            // Crear texto con información del usuario
+            StringBuilder info = new StringBuilder();
+            info.append("═══════════════════════\n");
+            info.append("     * S I B A L *     \n");
+            info.append("═══════════════════════\n");
+            info.append("  INFORMACIÓN USUARIO\n");
+            info.append("═══════════════════════\n\n");
+            info.append("Nombre:  ").append(usuario.getNombre()).append("\n\n");
+            info.append("Usuario:  ").append(usuario.getUsuario()).append("\n\n");
+            info.append("Rol:  ").append(usuario.getRol()).append("\n\n");
+            info.append("Estado:  ").append(usuario.isEstado() ? "Activo" : "Inactivo").append("\n");
+            info.append("═══════════════════════\n");
+
+            txtaInformacionU.setText(info.toString());
+            txtaInformacionU.setCaretPosition(0);
+
+            // Opcional: Cargar foto o ícono del usuario en lblUsua
+            // Por ahora puedes poner las iniciales
+            String iniciales = obtenerIniciales(usuario.getNombre());
+            lblUsua.setText("<html><div style='text-align: center; font-size: 24px; font-weight: bold;'>"
+                    + iniciales + "</div></html>");
+            lblUsua.setHorizontalAlignment(SwingConstants.CENTER);
+            lblUsua.setVerticalAlignment(SwingConstants.CENTER);
+            lblUsua.setBackground(new Color(200, 200, 255));
+            lblUsua.setOpaque(true);
+        }
+    }
+
+    // Obtener iniciales del nombre
+    private String obtenerIniciales(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            return "U";
+        }
+
+        String[] partes = nombre.trim().split("\\s+");
+        StringBuilder iniciales = new StringBuilder();
+
+        for (int i = 0; i < Math.min(2, partes.length); i++) {
+            if (!partes[i].isEmpty()) {
+                iniciales.append(partes[i].charAt(0));
+            }
+        }
+
+        return iniciales.toString().toUpperCase();
     }
 
     /**
@@ -26,12 +103,99 @@ public class frmPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                super.paintComponent(g);
+
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    0, 0, new java.awt.Color(200, 200, 200),  // Gris suave (arriba)
+                    0, getHeight(), new java.awt.Color(240, 240, 240) // Gris más claro (abajo)
+                );
+
+                g2.setPaint(gp);
+                g2.fillRect(0, 0, getWidth(), getHeight());
+            }
+        }
+        ;
         lblUsua = new javax.swing.JLabel();
-        btnSalir = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton() {
+
+            {
+                setContentAreaFilled(false);
+                setFocusPainted(false);
+                setBorderPainted(false);
+                setOpaque(false);
+            }
+
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+                    java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    0, 0, new java.awt.Color(200, 0, 0),      // Rojo fuerte
+                    getWidth(), 0, new java.awt.Color(255, 120, 120) // Rojo claro
+                );
+
+                g2.setPaint(gp);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+
+                super.paintComponent(g);
+            }
+        }
+        ;
         jScrollPane1 = new javax.swing.JScrollPane();
         txtaInformacionU = new javax.swing.JTextArea();
-        jPanel2 = new javax.swing.JPanel();
+        btnCerrarSesion = new javax.swing.JButton() {
+
+            {
+                setContentAreaFilled(false);
+                setFocusPainted(false);
+                setBorderPainted(false);
+                setOpaque(false);
+            }
+
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+                    java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    getWidth(), 0, new java.awt.Color(255, 160, 122), // Naranja claro rojizo (derecha)
+                    0, 0, new java.awt.Color(220, 60, 40)             // Rojo-naranja más fuerte (izquierda)
+                );
+
+                g2.setPaint(gp);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+
+                super.paintComponent(g);
+            }
+        }
+        ;
+        jPanel2 = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                super.paintComponent(g);
+
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+
+                java.awt.GradientPaint gp = new java.awt.GradientPaint(
+                    getWidth(), 0, new java.awt.Color(176, 224, 255), // Azul claro
+                    0, 0, new java.awt.Color(245, 250, 255)           // Casi blanco
+                );
+
+                g2.setPaint(gp);
+                g2.fillRect(0, 0, getWidth(), getHeight());
+            }
+        }
+        ;
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -43,6 +207,10 @@ public class frmPrincipal extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        btnProveedor2 = new javax.swing.JButton();
+        btnProveedor1 = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         lblFondoP = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -71,6 +239,15 @@ public class frmPrincipal extends javax.swing.JFrame {
         txtaInformacionU.setRows(5);
         jScrollPane1.setViewportView(txtaInformacionU);
 
+        btnCerrarSesion.setBackground(new java.awt.Color(153, 0, 0));
+        btnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCerrarSesion.setText("CERRAR SESIÓN");
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -84,9 +261,14 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addComponent(lblUsua, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(53, Short.MAX_VALUE)
-                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,8 +276,10 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addGap(8, 8, 8)
                 .addComponent(lblUsua, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnCerrarSesion)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(btnSalir)
                 .addGap(20, 20, 20))
         );
@@ -104,6 +288,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lblFondo1.png"))); // NOI18N
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
@@ -117,82 +302,116 @@ public class frmPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(52, 52, 52)
                 .addComponent(jLabel2)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(17, 17, 17)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel2)))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 110));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 750, 110));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("¿Que desea revisar hoy?");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 130, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 130, -1, -1));
 
+        btnProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnProductos.jpg"))); // NOI18N
         btnProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProductoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 330, 80, 80));
+        getContentPane().add(btnProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 330, 80, 80));
 
+        btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnUsuario.png"))); // NOI18N
         btnUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUsuarioActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 180, 80, 80));
+        getContentPane().add(btnUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 180, 80, 80));
 
+        btnProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnProveedor.jpg"))); // NOI18N
         btnProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProveedorActionPerformed(evt);
             }
         });
-        getContentPane().add(btnProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, 80, 80));
+        getContentPane().add(btnProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 180, 80, 80));
 
+        btnMovimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnMovimientos.jpg"))); // NOI18N
         btnMovimiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMovimientoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnMovimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 330, 80, 80));
+        getContentPane().add(btnMovimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 330, 80, 80));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel5.setText("MOVIMIENTOS");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 420, -1, -1));
+        jLabel5.setText("REPORTES");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 270, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("USUARIO");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 270, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 270, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel7.setText("PROVEEDOR");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 270, -1, -1));
+        jLabel7.setText("MOVIMIENTOS");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 420, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setText("PRODUCTOS");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 420, -1, -1));
-        getContentPane().add(lblFondoP, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 110, 510, 390));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 420, -1, -1));
+
+        btnProveedor2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnReportes2.jpg"))); // NOI18N
+        btnProveedor2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProveedor2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnProveedor2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 180, 80, 80));
+
+        btnProveedor1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnProgramador.jpg"))); // NOI18N
+        btnProveedor1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProveedor1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnProveedor1, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 330, 80, 80));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel9.setText("PROVEEDOR");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 270, -1, -1));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel10.setText("PROGRAMADOR");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 420, -1, -1));
+        getContentPane().add(lblFondoP, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 550, 390));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        // TODO add your handling code here:
-        System.exit(0);
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro que desea salir del sistema?",
+                "Confirmar salida",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            sesion.cerrarSesion();
+            System.exit(0);
+        }
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductoActionPerformed
@@ -202,7 +421,17 @@ public class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProductoActionPerformed
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
-        // TODO add your handling code here:
+// Verificar permisos nuevamente (por seguridad)
+        if (!sesion.esAdministrador()) {
+            JOptionPane.showMessageDialog(this,
+                    "Acceso denegado.\nSolo los Administradores pueden gestionar usuarios.",
+                    "Permiso denegado",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        dispose();
+        new frmUsuarios().setVisible(true);
 
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
@@ -215,8 +444,36 @@ public class frmPrincipal extends javax.swing.JFrame {
     private void btnMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimientoActionPerformed
         // TODO add your handling code here:
         dispose();
-        new frmMovimiento().setVisible(true);
+        new frmReportes().setVisible(true);
     }//GEN-LAST:event_btnMovimientoActionPerformed
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Está seguro que desea cerrar sesión?", 
+            "Confirmar", 
+            JOptionPane.YES_NO_OPTION);
+        
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            sesion.cerrarSesion();
+            this.dispose();
+            new frmInicio().setVisible(true);
+        }
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    private void btnProveedor2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedor2ActionPerformed
+
+     
+        frmReportes reportes = new frmReportes();
+        reportes.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnProveedor2ActionPerformed
+
+    private void btnProveedor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedor1ActionPerformed
+                // TODO add your handling code here:
+        frmProgramador prog = new frmProgramador();
+        prog.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnProveedor1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -254,18 +511,23 @@ public class frmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnMovimiento;
     private javax.swing.JButton btnProducto;
     private javax.swing.JButton btnProveedor;
+    private javax.swing.JButton btnProveedor1;
+    private javax.swing.JButton btnProveedor2;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
