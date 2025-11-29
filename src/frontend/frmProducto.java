@@ -794,6 +794,7 @@ public class frmProducto extends javax.swing.JFrame {
 
         txteFechaPr.setBorder(javax.swing.BorderFactory.createTitledBorder("FECHA"));
 
+        btnGuardarPR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnguardar.png"))); // NOI18N
         btnGuardarPR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarPRActionPerformed(evt);

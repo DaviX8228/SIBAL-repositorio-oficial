@@ -461,13 +461,18 @@ public class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnProveedor2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedor2ActionPerformed
-        // TODO add your handling code here:
+
+     
+        frmReportes reportes = new frmReportes();
+        reportes.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnProveedor2ActionPerformed
 
     private void btnProveedor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedor1ActionPerformed
-        // TODO add your handling code here:
-        dispose();
-        new frmProveedor().setVisible(true);
+                // TODO add your handling code here:
+        frmProgramador prog = new frmProgramador();
+        prog.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnProveedor1ActionPerformed
 
     /**
