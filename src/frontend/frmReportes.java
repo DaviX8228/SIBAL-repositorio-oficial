@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
+import java.sql.SQLException;
 
 /**
  *
@@ -59,7 +60,17 @@ public class frmReportes extends javax.swing.JFrame {
             System.out.println("Error al cargar inventario: " + e.getMessage());
         }
     }
-
+    
+    public void refrescarReporte() {
+    String opcion = chboxTipo.getSelectedItem().toString();
+    switch (opcion) {
+        case "Inventario completo": cargarInventario(); break;
+        case "Productos con stock bajo": cargarProductosBajos(); break;
+        case "Entradas del día": cargarEntradasDelDia(); break;
+        case "Salidas del día": cargarSalidasDelDia(); break;
+    }
+}
+    
     private boolean hayProductosConBajoStock() {
 
         String sql = "SELECT COUNT(*) AS total FROM productos WHERE stock < 10";
@@ -107,82 +118,86 @@ public class frmReportes extends javax.swing.JFrame {
         actualizarAlerta(hayProductosConBajoStock());
     }
     
-     private void cargarEntradasDelDia() {
-        String sql = "SELECT m.id_movimiento, p.nombre, m.cantidad, m.fecha, u.nombre AS usuario, m.observaciones " +
-                     "FROM movimientos m " +
-                     "INNER JOIN productos p ON m.id_producto = p.id_producto " +
-                     "INNER JOIN usuarios u ON m.id_usuario = u.id_usuario " +
-                     "WHERE m.tipo_movimiento = 'Entrada' AND DATE(m.fecha) = CURRENT_DATE";
+   private void cargarEntradasDelDia() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new Object[]{"ID", "Producto", "Cantidad", "Fecha", "Usuario", "Observaciones"});
+        tblReporte.setModel(modelo);
 
-        try (Connection con = ConexionBD.conectar();
-             PreparedStatement ps = con.prepareStatement(sql);
+        String sql =
+         "SELECT m.id_movimiento, p.nombre AS producto, m.cantidad, m.fecha, u.nombre AS usuario, m.observaciones " +
+         "FROM Movimientos m " +
+         "INNER JOIN Productos p ON m.id_producto = p.id_producto " +
+         "INNER JOIN Usuarios u ON m.id_usuario = u.id_usuario " +
+         "WHERE UPPER(m.tipo_movimiento) = 'ENTRADA' " +
+         "AND m.fecha >= CURDATE() " +
+         "AND m.fecha < CURDATE() + INTERVAL 1 DAY";
+
+
+        try (Connection conn = ConexionBD.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
-            DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"ID", "Producto", "Cantidad", "Fecha", "Usuario", "Observaciones"}, 0
-            );
-
             while (rs.next()) {
-                model.addRow(new Object[]{
-                        rs.getInt("id_movimiento"),
-                        rs.getString("nombre"),
-                        rs.getInt("cantidad"),
-                        rs.getString("fecha"),
-                        rs.getString("usuario"),
-                        rs.getString("observaciones")
+                modelo.addRow(new Object[]{
+                    rs.getInt("id_movimiento"),
+                    rs.getString("producto"),
+                    rs.getInt("cantidad"),
+                    rs.getString("fecha"),
+                    rs.getString("usuario"),
+                    rs.getString("observaciones")
                 });
             }
 
-            tblReporte.setModel(model);
-
-        } catch (Exception e) {
-            System.out.println("Error al cargar entradas del día: " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar entradas del día: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
-    
+
     private void cargarSalidasDelDia() {
-        String sql = "SELECT m.id_movimiento, p.nombre, m.cantidad, m.fecha, u.nombre AS usuario, m.observaciones " +
-                     "FROM movimientos m " +
-                     "INNER JOIN productos p ON m.id_producto = p.id_producto " +
-                     "INNER JOIN usuarios u ON m.id_usuario = u.id_usuario " +
-                     "WHERE m.tipo_movimiento = 'Salida' AND DATE(m.fecha) = CURRENT_DATE";
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new Object[]{"ID", "Producto", "Cantidad", "Fecha", "Usuario", "Observaciones"});
+        tblReporte.setModel(modelo);
+
+        String sql =
+        "SELECT m.id_movimiento, p.nombre AS producto, m.cantidad, m.fecha, u.nombre AS usuario, m.observaciones " +
+        "FROM Movimientos m " +
+        "INNER JOIN Productos p ON m.id_producto = p.id_producto " +
+        "INNER JOIN Usuarios u ON m.id_usuario = u.id_usuario " +
+        "WHERE UPPER(m.tipo_movimiento) = 'SALIDA' " +
+        "AND m.fecha >= CURDATE() " +
+        "AND m.fecha < CURDATE() + INTERVAL 1 DAY";
+
 
         try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
-            DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"ID", "Producto", "Cantidad", "Fecha", "Usuario", "Observaciones"}, 0
-            );
-
             while (rs.next()) {
-                model.addRow(new Object[]{
-                        rs.getInt("id_movimiento"),
-                        rs.getString("nombre"),
-                        rs.getInt("cantidad"),
-                        rs.getString("fecha"),
-                        rs.getString("usuario"),
-                        rs.getString("observaciones")
+                modelo.addRow(new Object[]{
+                    rs.getInt("id_movimiento"),
+                    rs.getString("producto"),
+                    rs.getInt("cantidad"),
+                    rs.getString("fecha"),
+                    rs.getString("usuario"),
+                    rs.getString("observaciones")
                 });
             }
 
-            tblReporte.setModel(model);
-
-        } catch (Exception e) {
-            System.out.println("Error al cargar salidas del día: " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar salidas del día: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
-    
-     // ---------------------------------------------------------
-    //              ALERTA DE STOCK BAJO
-    // ---------------------------------------------------------
 
+    
+    // Alerta que se pronunciara si hay bajo stock o si todo esta bien :)
     private void actualizarAlerta(boolean bajo) {
         if (bajo) {
-            lblAlerta.setText("⚠ PRODUCTOS CON BAJO STOCK ⚠");
+            lblAlerta.setText(" PRODUCTOS CON BAJO STOCK ");
             lblAlerta.setForeground(new java.awt.Color(255, 51, 51));
         } else {
-            lblAlerta.setText("Todo en orden ✓");
+            lblAlerta.setText("Todo en orden");
             lblAlerta.setForeground(new java.awt.Color(0, 204, 0));
         }
     }
@@ -312,7 +327,7 @@ public class frmReportes extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Producto", "Stock", "Stock Minimo", "Estado"
+                "ID", "Producto", "Stock", "Usuario", "Estado"
             }
         ) {
             Class[] types = new Class [] {
@@ -432,6 +447,81 @@ public class frmReportes extends javax.swing.JFrame {
 
     private void btnExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarActionPerformed
         // TODO add your handling code here:
+     try {
+        //Identifica el tipo de reporte que sera :)
+        String reporte = chboxTipo.getSelectedItem().toString();
+
+        if (reporte.equals("TIPO DE REPORTE")) {
+            JOptionPane.showMessageDialog(null, "Primero genere un reporte.");
+            return;
+        }
+
+        //Ruta que tomara el archivo :)
+        String rutaCarpeta = System.getProperty("user.home") + "/Desktop/Reportes/";
+
+        //En caso de no existir la carpeta
+        java.io.File carpeta = new java.io.File(rutaCarpeta);
+        if (!carpeta.exists()) {
+            carpeta.mkdirs();
+        }
+
+        // Colocacion del nombre para el archivo que se generara :)
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
+        String fechaHoraArchivo = sdf.format(new java.util.Date());
+        String nombreArchivo = rutaCarpeta 
+        + reporte.replace(" ", "_") 
+        + "_" + fechaHoraArchivo + ".pdf";
+
+        // Creacion del documento pdf :)
+        com.itextpdf.text.Document documento = new com.itextpdf.text.Document();
+        com.itextpdf.text.pdf.PdfWriter.getInstance(documento, new java.io.FileOutputStream(nombreArchivo));
+
+        documento.open();
+
+        // Colocacion del titulo del reporte :)
+        com.itextpdf.text.Paragraph titulo = new com.itextpdf.text.Paragraph(
+        "REPORTE: " + reporte,
+        new com.itextpdf.text.Font(
+                com.itextpdf.text.Font.FontFamily.HELVETICA, 
+                18, 
+                com.itextpdf.text.Font.BOLD
+            )
+        );
+        titulo.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+        documento.add(titulo);
+        
+        //Fecha y hora para el pdf :)
+        java.text.SimpleDateFormat sdfPDF = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); 
+        String fechaHoraPDF = sdfPDF.format(new java.util.Date());
+        documento.add(new com.itextpdf.text.Paragraph("\nFecha y Hora: " + fechaHoraPDF + "\n\n"));
+
+        // Tabla que se generara en el pdf :)
+        com.itextpdf.text.pdf.PdfPTable pdfTable = 
+                new com.itextpdf.text.pdf.PdfPTable(tblReporte.getColumnCount());
+
+        // Encabezados
+        for (int i = 0; i < tblReporte.getColumnCount(); i++) {
+            pdfTable.addCell(new com.itextpdf.text.Phrase(tblReporte.getColumnName(i)));
+        }
+
+        // Datos
+        for (int i = 0; i < tblReporte.getRowCount(); i++) {
+            for (int j = 0; j < tblReporte.getColumnCount(); j++) {
+                Object valor = tblReporte.getValueAt(i, j);
+                pdfTable.addCell(valor != null ? valor.toString() : "");
+            }
+        }
+
+        documento.add(pdfTable);
+        documento.close();
+
+        JOptionPane.showMessageDialog(null,
+                "PDF generado correctamente en:\n" + nombreArchivo);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al generar PDF: " + e.getMessage());
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_btnExportarActionPerformed
 
     /**

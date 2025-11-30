@@ -179,7 +179,7 @@
                 <Column editable="false" title="ID" type="java.lang.Integer"/>
                 <Column editable="false" title="Producto" type="java.lang.String"/>
                 <Column editable="false" title="Stock" type="java.lang.Integer"/>
-                <Column editable="false" title="Stock Minimo" type="java.lang.Integer"/>
+                <Column editable="false" title="Usuario" type="java.lang.Integer"/>
                 <Column editable="false" title="Estado" type="java.lang.String"/>
               </Table>
             </Property>
