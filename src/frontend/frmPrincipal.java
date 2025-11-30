@@ -444,7 +444,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     private void btnMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimientoActionPerformed
         // TODO add your handling code here:
         dispose();
-        new frmReportes().setVisible(true);
+        new frmMovimiento().setVisible(true);
     }//GEN-LAST:event_btnMovimientoActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed

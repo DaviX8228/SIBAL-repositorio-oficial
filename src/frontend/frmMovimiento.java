@@ -3,14 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package frontend;
-
-import backend.ConexionBD;
-import backend.Producto;
+ 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,213 +16,14 @@ import javax.swing.JOptionPane;
  */
 public class frmMovimiento extends javax.swing.JFrame {
     
-    private Producto productoSeleccionado;
-    private int cantidadCotizada;
-    
-    // Constructor que recibe producto y cantidad desde frmCotizaciones
-    public frmMovimiento(Producto producto, int cantidad) {
-        initComponents();
-        this.productoSeleccionado = producto;
-        this.cantidadCotizada = cantidad;
-        configurarFormulario();
-        cargarDatosProducto();
-    }
-    
-    // Constructor vacío (por si se abre directamente)
+    // Constructor vacío 
     public frmMovimiento() {
         initComponents();
-        configurarFormulario();
-    }
-
-    private void configurarFormulario() {
-        // Configurar fecha actual
-        java.util.Date fecha = new java.util.Date();
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        txteFecha.setText(formato.format(fecha));
+        java.time.format.DateTimeFormatter dtf = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        txteFecha.setText(java.time.LocalDate.now().format(dtf));
         txteFecha.setEditable(false);
-        
-        // Configurar combo de operaciones
-        cboOperacion.setSelectedIndex(0);
     }
-    
-    // Cargar datos del producto en el formulario
-    private void cargarDatosProducto() {
-        if (productoSeleccionado != null) {
-            txteProducto.setText(productoSeleccionado.getNombre());
-            txteCantidad.setText(String.valueOf(cantidadCotizada));
-            
-            // Agregar información adicional en observaciones
-            txteMovimiento.setText(
-                "Producto: " + productoSeleccionado.getNombre() + "\n" +
-                "Descripción: " + productoSeleccionado.getDescripcion() + "\n" +
-                "Stock actual: " + productoSeleccionado.getStock() + "\n" +
-                "Precio unitario: $" + productoSeleccionado.getPrecioUnitario()
-            );
-        }
-    }
-    
-    private boolean validarCampos() {
-        if (txteProducto.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese el nombre del producto", "Validación", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        
-        if (cboOperacion.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Seleccione el tipo de operación", "Validación", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        
-        if (txteCantidad.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese la cantidad", "Validación", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        
-        try {
-            int cantidad = Integer.parseInt(txteCantidad.getText().trim());
-            if (cantidad <= 0) {
-                JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0", "Validación", JOptionPane.WARNING_MESSAGE);
-                return false;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "La cantidad debe ser un número válido", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        
-        return true;
-    }
-    
-    private int guardarMovimiento() {
-        if (!validarCampos()) {
-            return -1;
-        }
-        
-        String producto = txteProducto.getText().trim();
-        String tipo = cboOperacion.getSelectedItem().toString();
-        String fechaTxt = txteFecha.getText();
-        int cantidad = Integer.parseInt(txteCantidad.getText().trim());
-        String observaciones = txteMovimiento.getText().trim();
 
-        int idGenerado = -1;
-        Connection con = null;
-
-        try {
-            con = ConexionBD.conectar();
-            
-            // Convertir fecha dd/MM/yyyy → yyyy-MM-dd (MySQL)
-            java.util.Date fechaUsuario = new SimpleDateFormat("dd/MM/yyyy").parse(fechaTxt);
-            String fechaSQL = new SimpleDateFormat("yyyy-MM-dd").format(fechaUsuario);
-
-            // Obtener ID del producto
-            String sqlProd = "SELECT id_producto, stock FROM Productos WHERE nombre = ?";
-            PreparedStatement psProd = con.prepareStatement(sqlProd);
-            psProd.setString(1, producto);
-            ResultSet rsProd = psProd.executeQuery();
-
-            if (!rsProd.next()) {
-                JOptionPane.showMessageDialog(this, "El producto '" + producto + "' no existe en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-                return -1;
-            }
-
-            int idProducto = rsProd.getInt("id_producto");
-            int stockActual = rsProd.getInt("stock");
-            psProd.close();
-            
-            // Validar stock si es salida
-            if (tipo.equals("SALIDA") && cantidad > stockActual) {
-                JOptionPane.showMessageDialog(this, 
-                    "Stock insuficiente. Disponible: " + stockActual + " unidades", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-                return -1;
-            }
-
-            // Insertar movimiento (sin id_usuario por ahora, puedes agregarlo después)
-            String sql = "INSERT INTO Movimientos " +
-                         "(tipo_movimiento, cantidad, id_producto, fecha, observaciones) " +
-                         "VALUES (?, ?, ?, ?, ?)";
-
-            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, tipo);
-            ps.setInt(2, cantidad);
-            ps.setInt(3, idProducto);
-            ps.setString(4, fechaSQL);
-            ps.setString(5, observaciones);
-
-            ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                idGenerado = rs.getInt(1);
-            }
-            ps.close();
-            
-            // Actualizar stock del producto
-            int nuevoStock = tipo.equals("ENTRADA") ? 
-                stockActual + cantidad : stockActual - cantidad;
-            
-            String sqlUpdate = "UPDATE Productos SET stock = ? WHERE id_producto = ?";
-            PreparedStatement psUpdate = con.prepareStatement(sqlUpdate);
-            psUpdate.setInt(1, nuevoStock);
-            psUpdate.setInt(2, idProducto);
-            psUpdate.executeUpdate();
-            psUpdate.close();
-            
-            System.out.println("✓ Movimiento guardado y stock actualizado");
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al guardar movimiento: " + e.getMessage(), 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        } finally {
-            try {
-                if (con != null && !con.isClosed()) {
-                    con.close();
-                }
-            } catch (Exception e) { //Aquí dbería de ir SQLException pero bn, no sé porque no me dejó.
-                e.printStackTrace();
-            }
-        }
-
-        return idGenerado;
-    }
-    
-    private void generarTicket(int id) {
-        String tipo = cboOperacion.getSelectedItem().toString();
-        String cantidad = txteCantidad.getText();
-        String fecha = txteFecha.getText();
-        String observaciones = txteMovimiento.getText();
-        
-        // Calcular total si hay precio
-        String totalStr = "";
-        if (productoSeleccionado != null) {
-            double total = productoSeleccionado.getPrecioUnitario() * Integer.parseInt(cantidad);
-            totalStr = "\nTotal: $" + String.format("%.2f", total);
-        }
-        
-        String ticket =
-                
-                "╔══════════════════════════════╗\n" +
-                "║       * S I B A L *       ║\n" +
-                "║   TICKET DE MOVIMIENTO    ║\n" +
-                "╚══════════════════════════════╝\n\n" +
-                "ID Movimiento: " + id + "\n" +
-                "────────────────────────────────\n" +
-                "Producto: " + txteProducto.getText() + "\n" +
-                "Tipo: " + tipo + "\n" +
-                "Cantidad: " + cantidad + " unidades\n" +
-                "Fecha: " + fecha + totalStr + "\n\n" +
-                "Observaciones:\n" +
-                observaciones + "\n" +
-                "────────────────────────────────\n" +
-                "   Movimiento registrado   \n" +
-                "════════════════════════════════";
-
-        lblTicket.setText("<html><pre style='font-family:monospace;'>" + 
-                         ticket.replace("\n", "<br>") + "</pre></html>");
-    }
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -367,7 +165,6 @@ public class frmMovimiento extends javax.swing.JFrame {
         jScrollPane1.setBackground(new java.awt.Color(204, 204, 204));
         jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(null, "OBSERVACIONES", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
 
-        txteMovimiento.setEditable(false);
         txteMovimiento.setBackground(new java.awt.Color(204, 204, 204));
         txteMovimiento.setColumns(20);
         txteMovimiento.setRows(5);
@@ -473,20 +270,114 @@ public class frmMovimiento extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnReciboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReciboActionPerformed
-        int id = guardarMovimiento();
+    String productoNombre = txteProducto.getText().trim();
+    String operacion = cboOperacion.getSelectedItem().toString();
+    String cantidadStr = txteCantidad.getText().trim();
+    String observacion = txteMovimiento.getText().trim();
 
-        if (id > 0) {
-            generarTicket(id);
-            JOptionPane.showMessageDialog(this, 
-                "Movimiento registrado correctamente.\nID: " + id, 
-                "Éxito", 
-                JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, 
-                "No se pudo registrar el movimiento.", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
+    if(productoNombre.isEmpty() || operacion.equals("SELECCIONE") || cantidadStr.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, llene todos los campos.");
+        return;
+    }
+
+    int cantidad;
+    try {
+        cantidad = Integer.parseInt(cantidadStr);
+        if(cantidad <= 0) throw new NumberFormatException();
+    } catch(NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Ingrese una cantidad válida.");
+        return;
+    }
+
+    //Revisa el usuario 
+    seguridad.Sesion sesion = seguridad.Sesion.getInstancia();
+    if (!sesion.hayUsuarioActivo()) {
+        JOptionPane.showMessageDialog(this, "No hay ningún usuario logueado.");
+        return;
+    }
+    int idUsuario = sesion.getIdUsuarioActivo();
+    String nombreUsuario = sesion.getUsuarioActivo().getNombre();
+
+    try (Connection conn = backend.ConexionBD.conectar()) {
+
+        //Revisa si existe el producto
+        PreparedStatement psProd = conn.prepareStatement(
+            "SELECT id_producto, stock FROM Productos WHERE nombre=?"
+        );
+        psProd.setString(1, productoNombre);
+        ResultSet rs = psProd.executeQuery();
+
+        if(!rs.next()) {
+            JOptionPane.showMessageDialog(this, "El producto no existe.");
+            return;
         }
+
+        int idProducto = rs.getInt("id_producto");
+        int stockActual = rs.getInt("stock");
+
+        // Calcular nuevo stock
+        int nuevoStock = stockActual;
+        if(operacion.equalsIgnoreCase("ENTRADA")) {
+            nuevoStock += cantidad;
+            operacion = "Entrada";
+        } else if(operacion.equalsIgnoreCase("SALIDA")) {
+            if(cantidad > stockActual) {
+                JOptionPane.showMessageDialog(this, "No hay suficiente stock para la salida.");
+                return;
+            }
+            nuevoStock -= cantidad;
+            operacion = "Salida";
+        }
+
+        //Actualiza los cambios hechos en el stock
+        PreparedStatement psUpdateStock = conn.prepareStatement(
+            "UPDATE Productos SET stock=? WHERE id_producto=?"
+        );
+        psUpdateStock.setInt(1, nuevoStock);
+        psUpdateStock.setInt(2, idProducto);
+        psUpdateStock.executeUpdate();
+
+        //Registra el usuario que hizo el movimiento 
+        PreparedStatement psMov = conn.prepareStatement(
+            "INSERT INTO Movimientos(tipo_movimiento, cantidad, id_producto, id_usuario, observaciones) VALUES(?, ?, ?, ?, ?)",
+            java.sql.Statement.RETURN_GENERATED_KEYS
+        );
+        psMov.setString(1, operacion);
+        psMov.setInt(2, cantidad);
+        psMov.setInt(3, idProducto);
+        psMov.setInt(4, idUsuario); 
+        psMov.setString(5, observacion);
+        psMov.executeUpdate();
+
+        ResultSet rsKey = psMov.getGeneratedKeys();
+        int idMovimiento = 0;
+        if(rsKey.next()) idMovimiento = rsKey.getInt(1);
+
+        //Da la fecha actualizada :)
+        String fechaActual = java.time.LocalDate.now().format(
+            java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        );
+        txteFecha.setText(fechaActual);
+
+        //Generacion del ticket :)
+        String ticket = "===== TICKET DE MOVIMIENTO =====\n";
+        ticket += "ID Movimiento: " + idMovimiento + "\n";
+        ticket += "Usuario: " + nombreUsuario + "\n"; 
+        ticket += "Producto: " + productoNombre + "\n";
+        ticket += "Tipo: " + operacion + "\n";
+        ticket += "Cantidad: " + cantidad + "\n";
+        ticket += "Fecha: " + fechaActual + "\n";
+        ticket += "Observaciones: " + observacion + "\n";
+        ticket += "Stock actual: " + nuevoStock + "\n";
+        ticket += "===============================\n";
+        lblTicket.setText("<html>" + ticket.replaceAll("\n", "<br>") + "</html>");
+
+        JOptionPane.showMessageDialog(this, "Movimiento registrado correctamente.");
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos: " + ex.getMessage());
+     }
     }//GEN-LAST:event_btnReciboActionPerformed
 
     /**
