@@ -4,6 +4,7 @@
  */
 package frontend;
  
+import backend.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,12 +17,52 @@ import javax.swing.JOptionPane;
  */
 public class frmMovimiento extends javax.swing.JFrame {
     
+    private Producto productoRecibido;
+    private int cantidadRecibida;
+    
+    // Nuevo constructor para recibir Producto y Cantidad desde frmCotizaciones
+    public frmMovimiento(Producto producto, int cantidad) {
+        initComponents();
+        
+        // Asignar los valores recibidos a las variables de instancia
+        this.productoRecibido = producto;
+        this.cantidadRecibida = cantidad;
+        
+        // Llamar al método para configurar la interfaz con los datos
+        cargarDatosCotizacion(); 
+        
+        java.time.format.DateTimeFormatter dtf = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        txteFecha.setText(java.time.LocalDate.now().format(dtf));
+        txteFecha.setEditable(false);
+    }
     // Constructor vacío 
     public frmMovimiento() {
         initComponents();
         java.time.format.DateTimeFormatter dtf = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
         txteFecha.setText(java.time.LocalDate.now().format(dtf));
         txteFecha.setEditable(false);
+    }
+    
+    // Método para cargar la información del producto y cantidad de la cotización
+    private void cargarDatosCotizacion() {
+        if (productoRecibido != null) {
+            // Muestra el nombre del producto en el campo de texto
+            txteProducto.setText(productoRecibido.getNombre());
+            // Haz que este campo no sea editable, ya que viene de otra ventana
+            txteProducto.setEditable(false); 
+            
+            // Muestra la cantidad en su campo de texto
+            txteCantidad.setText(String.valueOf(cantidadRecibida));
+            // Haz que este campo no sea editable
+            txteCantidad.setEditable(false);
+            
+            // Selecciona "SALIDA" por defecto, ya que viene de una cotización
+            cboOperacion.setSelectedItem("SALIDA"); 
+            cboOperacion.setEnabled(false); // No permitir cambiar la operación
+            
+            // Puedes añadir una observación por defecto
+            txteMovimiento.setText("Venta registrada desde cotización.");
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -22,7 +22,7 @@ import javax.swing.JScrollPane;
 
 /**
  *
- * @author MISAEL JIMENEZ
+ * @author MISAEL JIMENEZ (frontend) y DAVID VELAZQUEZ (backend)
  */
 public class frmCotizaciones extends javax.swing.JFrame {
 

@@ -480,7 +480,7 @@ public class frmReportes extends javax.swing.JFrame {
 
         // Colocacion del titulo del reporte :)
         com.itextpdf.text.Paragraph titulo = new com.itextpdf.text.Paragraph(
-        "REPORTE: " + reporte,
+        "SIBAL\nREPORTE: " + reporte,
         new com.itextpdf.text.Font(
                 com.itextpdf.text.Font.FontFamily.HELVETICA, 
                 18, 
