@@ -3,19 +3,44 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package frontend;
+import javax.swing.ImageIcon;
+import java.awt.Image;
 
 /**
  *
  * @author davhe
  */
 public class frmProgramador extends javax.swing.JFrame {
+     // Mensaje inicial mejorado
+    private final String mensajeInicial = 
+            "Este es el equipo de desarrollo que hizo posible SIBAL.\n"
+           + "Cada integrante aportó esfuerzo, dedicación y creatividad\n"
+           + "para construir este sistema con pasión y compromiso.";
+
+    // Método para mostrar imágenes
+    private void mostrarImagen(String nombreArchivo) {
+        try {
+            ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/" + nombreArchivo));
+            Image img = icon.getImage().getScaledInstance(
+                    jLabel1.getWidth(),
+                    jLabel1.getHeight(),
+                    Image.SCALE_SMOOTH);
+            jLabel1.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar la imagen: " + nombreArchivo);
+        }
+}
+
+
 
     /**
      * Creates new form frmProgramador
      */
     public frmProgramador() {
         initComponents();
-    }
+    mostrarImagen("lblProgramador.jpg");
+     jTextArea1.setText(mensajeInicial);
+     }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -87,6 +112,11 @@ public class frmProgramador extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 342, 206));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECCIONA", "Aviles Rodriguez Octavio Imanol", "Gonzales Salomon Victor Emmanuel", "Jiménez Chable Misael Eliud", "Solares Diaz Cristian Alexander", "Velazquez Herrera Angel David" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 80, 344, 40));
 
         jTextArea1.setEditable(false);
@@ -132,10 +162,55 @@ public class frmProgramador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
-        dispose();
-        new frmPrincipal().setVisible(true);
+frmPrincipal p = new frmPrincipal();
+dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+       String seleccionado = (String) jComboBox1.getSelectedItem();
+
+    switch (seleccionado) {
+
+        case "Aviles Rodriguez Octavio Imanol":
+            mostrarImagen("lblImanol.jpg");
+            jTextArea1.setText("Imanol fue el encargado de la documentación del proyecto y"
+                    + "\n de elaborar el reporte final, asegurando que toda la "
+                    + "\n información técnica y funcional quedara correctamente "
+                    + "\n registrada.");
+            break;
+
+        case "Velazquez Herrera Angel David":
+            mostrarImagen("lblDavid.jpg");
+            jTextArea1.setText("David programó las partes más importantes y críticas "
+                    + "\n del sistema, implementando la lógica principal y "
+                    + "\n asegurando su correcto funcionamiento.");
+            break;
+
+        case "Jiménez Chable Misael Eliud":
+            mostrarImagen("lblMisael.jpg");
+            jTextArea1.setText("Misael programó varias funciones del sistema y también "
+                    + "\n participó en el  diseño de la interfaz visual.");
+            break;
+
+        case "Solares Diaz Cristian Alexander":
+            mostrarImagen("lblAlexander.jpg");
+            jTextArea1.setText("Alexander participó en el diseño de frmReportes, programo el "
+                    + "\n frmMovimientos y arreglo los errores que se presentaban.");
+            break;
+
+        case "Gonzales Salomon Victor Emmanuel":
+            mostrarImagen("lblVictor.jpg");
+            jTextArea1.setText("Victor desarrolló la base de datos y "
+                    + "\n contribuyó en parte del diseño de la interfaz del sistema.");
+            break;
+
+        default:
+            jLabel1.setIcon(null);
+            jTextArea1.setText("");
+            break;
+    }
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
