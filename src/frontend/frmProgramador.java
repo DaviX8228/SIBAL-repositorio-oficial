@@ -8,7 +8,7 @@ import java.awt.Image;
 
 /**
  *
- * @author davhe
+ * @author Victor Emmanuel
  */
 public class frmProgramador extends javax.swing.JFrame {
      // Mensaje inicial mejorado
@@ -109,7 +109,7 @@ public class frmProgramador extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 342, 206));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 342, 270));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECCIONA", "Aviles Rodriguez Octavio Imanol", "Gonzales Salomon Victor Emmanuel", "Jiménez Chable Misael Eliud", "Solares Diaz Cristian Alexander", "Velazquez Herrera Angel David" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
@@ -154,8 +154,8 @@ public class frmProgramador extends javax.swing.JFrame {
                 btnVolverActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 310, -1, -1));
-        getContentPane().add(lblFondoProg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 810, 310));
+        getContentPane().add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 370, -1, -1));
+        getContentPane().add(lblFondoProg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 810, 390));
 
         pack();
         setLocationRelativeTo(null);
@@ -182,21 +182,24 @@ dispose();
 
         case "Velazquez Herrera Angel David":
             mostrarImagen("lblDavid.jpg");
-            jTextArea1.setText("David programó las partes más importantes y críticas "
-                    + "\n del sistema, implementando la lógica principal y "
+            jTextArea1.setText("David fue el líder de nuestro proyecto,"
+                    + "\n programó las partes más importantes y críticas "
+                    + "\n del sistema, implementando la lógica principal, "
+                    + "\n arquitectura de software, desarrollo del backend y "
                     + "\n asegurando su correcto funcionamiento.");
             break;
 
         case "Jiménez Chable Misael Eliud":
             mostrarImagen("lblMisael.jpg");
-            jTextArea1.setText("Misael programó varias funciones del sistema y también "
-                    + "\n participó en el  diseño de la interfaz visual.");
+            jTextArea1.setText("Misael participó en la elaboración del diseño visual"
+                    + "\n y de experiencia de usuario, para que quedara "
+                    + "\n impecable en tus manos!");
             break;
 
         case "Solares Diaz Cristian Alexander":
             mostrarImagen("lblAlexander.jpg");
-            jTextArea1.setText("Alexander participó en el diseño de frmReportes, programo el "
-                    + "\n frmMovimientos y arreglo los errores que se presentaban.");
+            jTextArea1.setText("Alexander participó en el desarrollo de frmReportes, programo el "
+                    + "\n frmMovimientos y arreglo los errores que se presentaban como debug en frontend");
             break;
 
         case "Gonzales Salomon Victor Emmanuel":
