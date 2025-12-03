@@ -394,8 +394,8 @@ public class frmPrincipal extends javax.swing.JFrame {
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 270, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel10.setText("PROGRAMADOR");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 420, -1, -1));
+        jLabel10.setText("CRÉDITOS");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 420, -1, -1));
         getContentPane().add(lblFondoP, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 550, 390));
 
         pack();

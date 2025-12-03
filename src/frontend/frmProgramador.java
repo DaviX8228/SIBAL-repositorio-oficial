@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package frontend;
+
 import javax.swing.ImageIcon;
 import java.awt.Image;
 
@@ -11,11 +12,12 @@ import java.awt.Image;
  * @author Victor Emmanuel
  */
 public class frmProgramador extends javax.swing.JFrame {
-     // Mensaje inicial mejorado
-    private final String mensajeInicial = 
-            "Este es el equipo de desarrollo que hizo posible SIBAL.\n"
-           + "Cada integrante aportó esfuerzo, dedicación y creatividad\n"
-           + "para construir este sistema con pasión y compromiso.";
+    // Mensaje inicial mejorado
+
+    private final String mensajeInicial
+            = "Este es el equipo de desarrollo que hizo posible SIBAL.\n"
+            + "Cada integrante aportó esfuerzo, dedicación y creatividad\n"
+            + "para construir este sistema con pasión y compromiso.";
 
     // Método para mostrar imágenes
     private void mostrarImagen(String nombreArchivo) {
@@ -29,18 +31,18 @@ public class frmProgramador extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println("No se pudo cargar la imagen: " + nombreArchivo);
         }
-}
-
-
+    }
 
     /**
      * Creates new form frmProgramador
      */
     public frmProgramador() {
         initComponents();
-    mostrarImagen("lblProgramador.jpg");
-     jTextArea1.setText(mensajeInicial);
-     }
+        mostrarImagen("lblProgramador.jpg");
+        jTextArea1.setText(mensajeInicial);
+
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -128,22 +130,22 @@ public class frmProgramador extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(153, 0, 0));
-        jLabel2.setText("PROGRAMADORES");
+        jLabel2.setText("CRÉDITOS");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(243, 243, 243)
-                .addComponent(jLabel2))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(322, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(318, 318, 318))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(jLabel2)
-                .addGap(7, 7, 7))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 12, Short.MAX_VALUE)
+                .addComponent(jLabel2))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 810, 60));
@@ -162,57 +164,58 @@ public class frmProgramador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-frmPrincipal p = new frmPrincipal();
-dispose();
+        frmPrincipal p = new frmPrincipal();
+        p.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-       String seleccionado = (String) jComboBox1.getSelectedItem();
+        String seleccionado = (String) jComboBox1.getSelectedItem();
 
-    switch (seleccionado) {
+        switch (seleccionado) {
 
-        case "Aviles Rodriguez Octavio Imanol":
-            mostrarImagen("lblImanol.jpg");
-            jTextArea1.setText("Imanol fue el encargado de la documentación del proyecto y"
-                    + "\n de elaborar el reporte final, asegurando que toda la "
-                    + "\n información técnica y funcional quedara correctamente "
-                    + "\n registrada.");
-            break;
+            case "Aviles Rodriguez Octavio Imanol":
+                mostrarImagen("lblImanol.jpg");
+                jTextArea1.setText("Imanol fue el encargado de la documentación del proyecto y"
+                        + "\n de elaborar el reporte final, asegurando que toda la "
+                        + "\n información técnica y funcional quedara correctamente "
+                        + "\n registrada.");
+                break;
 
-        case "Velazquez Herrera Angel David":
-            mostrarImagen("lblDavid.jpg");
-            jTextArea1.setText("David fue el líder de nuestro proyecto,"
-                    + "\n programó las partes más importantes y críticas "
-                    + "\n del sistema, implementando la lógica principal, "
-                    + "\n arquitectura de software, desarrollo del backend y "
-                    + "\n asegurando su correcto funcionamiento.");
-            break;
+            case "Velazquez Herrera Angel David":
+                mostrarImagen("lblDavid.jpg");
+                jTextArea1.setText("David fue el líder de nuestro proyecto,"
+                        + "\n programó las partes más importantes y críticas "
+                        + "\n del sistema, implementando la lógica principal, "
+                        + "\n arquitectura de software, desarrollo del backend y "
+                        + "\n asegurando su correcto funcionamiento.");
+                break;
 
-        case "Jiménez Chable Misael Eliud":
-            mostrarImagen("lblMisael.jpg");
-            jTextArea1.setText("Misael participó en la elaboración del diseño visual"
-                    + "\n y de experiencia de usuario, para que quedara "
-                    + "\n impecable en tus manos!");
-            break;
+            case "Jiménez Chable Misael Eliud":
+                mostrarImagen("lblMisael.jpg");
+                jTextArea1.setText("Misael participó en la elaboración del diseño visual"
+                        + "\n y de experiencia de usuario, para que quedara "
+                        + "\n impecable en tus manos!");
+                break;
 
-        case "Solares Diaz Cristian Alexander":
-            mostrarImagen("lblAlexander.jpg");
-            jTextArea1.setText("Alexander participó en el desarrollo de frmReportes, programo el "
-                    + "\n frmMovimientos y arreglo los errores que se presentaban como debug en frontend");
-            break;
+            case "Solares Diaz Cristian Alexander":
+                mostrarImagen("lblAlexander.jpg");
+                jTextArea1.setText("Alexander participó en el desarrollo de frmReportes, programo el "
+                        + "\n frmMovimientos y arreglo los errores que se presentaban como debug en frontend");
+                break;
 
-        case "Gonzales Salomon Victor Emmanuel":
-            mostrarImagen("lblVictor.jpg");
-            jTextArea1.setText("Victor desarrolló la base de datos y "
-                    + "\n contribuyó en parte del diseño de la interfaz del sistema.");
-            break;
+            case "Gonzales Salomon Victor Emmanuel":
+                mostrarImagen("lblVictor.jpg");
+                jTextArea1.setText("Victor desarrolló la base de datos y "
+                        + "\n contribuyó en parte del diseño de la interfaz del sistema.");
+                break;
 
-        default:
-            jLabel1.setIcon(null);
-            jTextArea1.setText("");
-            break;
-    }
+            default:
+                jLabel1.setIcon(null);
+                jTextArea1.setText("");
+                break;
+        }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
@@ -224,7 +227,9 @@ dispose();
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+
         try {
+
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());

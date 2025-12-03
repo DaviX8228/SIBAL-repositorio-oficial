@@ -27,7 +27,7 @@ public class ValidarAcceso {
             return null;
         }
         
-        String sql = "SELECT * FROM Usuarios WHERE usuario = ? AND contraseña = ? AND estado = 1";
+        String sql = "SELECT * FROM Usuarios WHERE usuario = ? AND contraseña = ? AND estado = TRUE";
         
         try (Connection conn = ConexionBD.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {

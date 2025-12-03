@@ -23,6 +23,12 @@ public class frmInicio extends javax.swing.JFrame {
      */
     public frmInicio() {
         initComponents();
+        // Ponemos el icono
+        try {
+            setIconImage(new ImageIcon(getClass().getResource("/imagenes/logo-sibal.jpeg")).getImage());
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar el ícono: " + e.getMessage());
+        }
     }
 
     /**
@@ -294,6 +300,8 @@ public class frmInicio extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+        InicializadorBD.inicializar();
+      
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -314,6 +322,7 @@ public class frmInicio extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            
             public void run() {
                 new frmInicio().setVisible(true);
             }

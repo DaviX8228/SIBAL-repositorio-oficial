@@ -15,18 +15,19 @@ import java.sql.SQLException;
  */
 public class ConexionBD {
     
-    private static final String URL = "jdbc:mysql://localhost:3307/sibal";
-    private static final String USER = "root"; 
-    private static final String PASSWORD = ""; //como no tenemos contraseña root de MySQL pss así lo dejamos 
-
+  private static final String URL = "jdbc:h2:./basedatos/sibal;AUTO_SERVER=TRUE";
+    private static final String USER = "sa"; 
+    private static final String PASSWORD = ""; 
+    
     public static Connection conectar() {
         Connection conexion = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.h2.Driver");
             conexion = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Conexión exitosa a la base de datos SIBAL.");
+            System.out.println("✓ Conexión exitosa a la base de datos SIBAL.");
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("Error al conectar: " + e.getMessage());
+            System.out.println("✗ Error al conectar: " + e.getMessage());
+            e.printStackTrace();
         }
         return conexion;
     }
